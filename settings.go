@@ -16,10 +16,10 @@ const (
 )
 
 const (
-	flagDirect     = 1 << iota
-	flagUseProxy   // use a proxy server
-	flagUseScript  // use setup script
-	flagAutoDetect // automatically detect settings
+	FlagDirect     = 1 << iota
+	FlagUseProxy   // use a proxy server
+	FlagUseScript  // use setup script
+	FlagAutoDetect // automatically detect settings
 )
 
 func init() {
@@ -89,7 +89,7 @@ func writeString(w io.Writer, s string) error {
 type Settings struct {
 	size          int32
 	version       int32
-	flags         int32
+	Flags         int32
 	ProxyAddress  string
 	BypassList    string
 	ScriptAddress string
@@ -105,7 +105,7 @@ func marshal(settings *Settings) (data []byte, err error) {
 	if err = binary.Write(buffer, binary.LittleEndian, settings.version); err != nil {
 		return
 	}
-	if err = binary.Write(buffer, binary.LittleEndian, settings.flags); err != nil {
+	if err = binary.Write(buffer, binary.LittleEndian, settings.Flags); err != nil {
 		return
 	}
 
@@ -132,7 +132,7 @@ func unmarshal(data []byte) (settings *Settings, err error) {
 	if err = binary.Read(buffer, binary.LittleEndian, &settings.version); err != nil {
 		return
 	}
-	if err = binary.Read(buffer, binary.LittleEndian, &settings.flags); err != nil {
+	if err = binary.Read(buffer, binary.LittleEndian, &settings.Flags); err != nil {
 		return
 	}
 
@@ -164,6 +164,7 @@ func ReadSettings() (*Settings, error) {
 }
 
 func WriteSettings(settings *Settings) error {
+	settings.version++
 	data, err := marshal(settings)
 	if err != nil {
 		return err
@@ -174,42 +175,42 @@ func WriteSettings(settings *Settings) error {
 
 func (s *Settings) setFlag(flag int32, v bool) {
 	if v {
-		s.flags |= flag
+		s.Flags |= flag
 	} else {
-		s.flags &^= flag
+		s.Flags &^= flag
 	}
 }
 
 func (s *Settings) Direct() bool {
-	return s.flags&flagDirect != 0
+	return s.Flags&FlagDirect != 0
 }
 
 func (s *Settings) SetDirect(v bool) {
-	s.setFlag(flagDirect, v)
+	s.setFlag(FlagDirect, v)
 }
 
 func (s *Settings) UseProxy() bool {
-	return s.flags&flagUseProxy != 0
+	return s.Flags&FlagUseProxy != 0
 }
 
 func (s *Settings) SetUseProxy(v bool) {
-	s.setFlag(flagUseProxy, v)
+	s.setFlag(FlagUseProxy, v)
 }
 
 func (s *Settings) UseScript() bool {
-	return s.flags&flagUseScript != 0
+	return s.Flags&FlagUseScript != 0
 }
 
 func (s *Settings) SetUseScript(v bool) {
-	s.setFlag(flagUseScript, v)
+	s.setFlag(FlagUseScript, v)
 }
 
 func (s *Settings) AutoDetect() bool {
-	return s.flags&flagAutoDetect != 0
+	return s.Flags&FlagAutoDetect != 0
 }
 
 func (s *Settings) SetAutoDetect(v bool) {
-	s.setFlag(flagAutoDetect, v)
+	s.setFlag(FlagAutoDetect, v)
 }
 
 var tmpl = template.Must(template.New("").Parse(`Use proxy     : {{.UseProxy}}
