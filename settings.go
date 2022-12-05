@@ -181,14 +181,6 @@ func (s *Settings) setFlag(flag int32, v bool) {
 	}
 }
 
-func (s *Settings) Direct() bool {
-	return s.Flags&FlagDirect != 0
-}
-
-func (s *Settings) SetDirect(v bool) {
-	s.setFlag(FlagDirect, v)
-}
-
 func (s *Settings) UseProxy() bool {
 	return s.Flags&FlagUseProxy != 0
 }

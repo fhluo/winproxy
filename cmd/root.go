@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/fhluo/winproxy"
+	"github.com/fhluo/winproxy/i18n"
 	"github.com/spf13/cobra"
 	"log"
 )
@@ -19,12 +20,11 @@ var (
 var rootCmd = &cobra.Command{
 	Use: "winproxy",
 	Run: func(cmd *cobra.Command, args []string) {
-		if !flagsChanged(cmd, "direct", "use-proxy", "use-script", "auto-detect", "proxy-address", "bypass-list", "script-address") {
+		if !flagsChanged(cmd, "use-proxy", "use-script", "auto-detect", "proxy-address", "bypass-list", "script-address") {
 			fmt.Println(settings)
 			return
 		}
 
-		settings.SetDirect(direct)
 		settings.SetUseProxy(useProxy)
 		settings.SetUseScript(useScript)
 		settings.SetAutoDetect(autoDetect)
@@ -46,14 +46,13 @@ func init() {
 		log.Fatalln(err)
 	}
 
-	rootCmd.Flags().BoolVar(&direct, "direct", settings.Direct(), "direct to net")
-	rootCmd.Flags().BoolVar(&useProxy, "use-proxy", settings.UseProxy(), "use a proxy server")
-	rootCmd.Flags().BoolVar(&useScript, "use-script", settings.UseScript(), "use setup script")
-	rootCmd.Flags().BoolVar(&autoDetect, "auto-detect", settings.AutoDetect(), "automatically detect settings")
+	rootCmd.Flags().BoolVar(&useProxy, "use-proxy", settings.UseProxy(), i18n.Localize("use-proxy", "use a proxy server"))
+	rootCmd.Flags().BoolVar(&useScript, "use-script", settings.UseScript(), i18n.Localize("use-script", "use setup script"))
+	rootCmd.Flags().BoolVar(&autoDetect, "auto-detect", settings.AutoDetect(), i18n.Localize("auto-detect", "automatically detect settings"))
 
-	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress, "proxy address")
-	rootCmd.Flags().StringVar(&settings.BypassList, "bypass-list", settings.BypassList, "bypass list")
-	rootCmd.Flags().StringVar(&settings.ScriptAddress, "script-address", settings.ScriptAddress, "script address")
+	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress, i18n.Localize("proxy-address", "proxy address"))
+	rootCmd.Flags().StringVar(&settings.BypassList, "bypass-list", settings.BypassList, i18n.Localize("bypass-list", "bypass list"))
+	rootCmd.Flags().StringVar(&settings.ScriptAddress, "script-address", settings.ScriptAddress, i18n.Localize("script-address", "script address"))
 }
 
 func flagsChanged(cmd *cobra.Command, names ...string) bool {
