@@ -5,23 +5,36 @@ import (
 	"github.com/fhluo/winproxy"
 	"github.com/fhluo/winproxy/i18n"
 	"github.com/spf13/cobra"
-	"log"
+	"golang.org/x/exp/slog"
+	"os"
 )
 
 var (
 	settings *winproxy.Settings
 
-	direct     bool
 	useProxy   bool
 	useScript  bool
 	autoDetect bool
 )
 
+func init() {
+	slog.SetDefault(slog.New(
+		slog.HandlerOptions{
+			ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
+				if a.Key == slog.TimeKey {
+					a.Key = ""
+				}
+				return a
+			},
+		}.NewTextHandler(os.Stderr),
+	))
+}
+
 var rootCmd = &cobra.Command{
 	Use: "winproxy",
 	Run: func(cmd *cobra.Command, args []string) {
 		if !flagsChanged(cmd, "use-proxy", "use-script", "auto-detect", "proxy-address", "bypass-list", "script-address") {
-			fmt.Println(settings)
+			fmt.Println(formatSettings(settings))
 			return
 		}
 
@@ -30,20 +43,19 @@ var rootCmd = &cobra.Command{
 		settings.SetAutoDetect(autoDetect)
 
 		if err := winproxy.WriteSettings(settings); err != nil {
-			log.Println(err)
+			slog.Error("failed to write settings", err)
 		}
 
-		fmt.Println(settings)
+		fmt.Println(formatSettings(settings))
 	},
 }
 
 func init() {
-	log.SetFlags(0)
-
 	var err error
 	settings, err = winproxy.ReadSettings()
 	if err != nil {
-		log.Fatalln(err)
+		slog.Error("failed to read settings", err)
+		os.Exit(1)
 	}
 
 	rootCmd.Flags().BoolVar(&useProxy, "use-proxy", settings.UseProxy(), i18n.Localize("use-proxy", "use a proxy server"))
@@ -66,6 +78,7 @@ func flagsChanged(cmd *cobra.Command, names ...string) bool {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Fatalln(err)
+		slog.Error("failed to execute root command", err)
+		os.Exit(1)
 	}
 }

@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/fhluo/winproxy"
 	"github.com/spf13/cobra"
-	"log"
+	"golang.org/x/exp/slog"
 )
 
 var offCmd = &cobra.Command{
@@ -12,7 +12,7 @@ var offCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		settings.SetUseProxy(false)
 		if err := winproxy.WriteSettings(settings); err != nil {
-			log.Println(err)
+			slog.Error("failed to write settings", err)
 		}
 	},
 }

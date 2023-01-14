@@ -4,15 +4,13 @@ import (
 	"embed"
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/exp/slog"
 	"golang.org/x/sys/windows"
 	"golang.org/x/text/language"
-	"log"
 	"os"
 )
 
 var (
-	logger = log.New(os.Stdout, "i18n: ", 0)
-
 	//go:embed locales
 	locales embed.FS
 
@@ -25,19 +23,22 @@ func init() {
 
 	_, err := bundle.LoadMessageFileFS(locales, "locales/en.toml")
 	if err != nil {
-		logger.Fatalln(err)
+		slog.Error("failed to load message file", err, "path", "locales/en.toml")
+		os.Exit(1)
 	}
 
 	_, err = bundle.LoadMessageFileFS(locales, "locales/zh.toml")
 	if err != nil {
-		logger.Fatalln(err)
+		slog.Error("failed to load message file", err, "path", "locales/zh.toml")
+		os.Exit(1)
 	}
 
 	languages, err := windows.GetUserPreferredUILanguages(windows.MUI_LANGUAGE_NAME)
 	if err != nil {
 		languages, err = windows.GetSystemPreferredUILanguages(windows.MUI_LANGUAGE_NAME)
 		if err != nil {
-			logger.Fatalln(err)
+			slog.Error("failed to get system preferred UI languages", err)
+			os.Exit(1)
 		}
 	}
 

@@ -5,9 +5,6 @@ import (
 	"encoding/binary"
 	"golang.org/x/sys/windows/registry"
 	"io"
-	"log"
-	"strings"
-	"text/template"
 )
 
 const (
@@ -21,11 +18,6 @@ const (
 	FlagUseScript  // use setup script
 	FlagAutoDetect // automatically detect settings
 )
-
-func init() {
-	log.SetFlags(0)
-	log.SetPrefix("winproxy: ")
-}
 
 func getDefaultConnectionSettings() ([]byte, error) {
 	key, err := registry.OpenKey(registry.CURRENT_USER, keyPath, registry.QUERY_VALUE)
@@ -203,20 +195,4 @@ func (s *Settings) AutoDetect() bool {
 
 func (s *Settings) SetAutoDetect(v bool) {
 	s.setFlag(FlagAutoDetect, v)
-}
-
-var tmpl = template.Must(template.New("").Parse(`Use proxy     : {{.UseProxy}}
-Proxy address : {{.ProxyAddress}}
-Bypass list   : {{.BypassList}}
-Use script    : {{.UseScript}}
-Script address: {{.ScriptAddress}}
-Auto-detect   : {{.AutoDetect}}
-`))
-
-func (s *Settings) String() string {
-	b := new(strings.Builder)
-	if err := tmpl.Execute(b, s); err != nil {
-		log.Println(err)
-	}
-	return b.String()
 }
