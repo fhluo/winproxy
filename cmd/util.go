@@ -15,7 +15,7 @@ var (
 	settingsTemplate = template.Must(template.New("").Parse(settingsTemplateString))
 )
 
-func formatSettings(s *winproxy.Settings) string {
+func formatSettings(s winproxy.Settings) string {
 	b := new(strings.Builder)
 	if err := settingsTemplate.Execute(b, s); err != nil {
 		slog.Error("failed to execute settings template", err)

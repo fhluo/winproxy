@@ -10,25 +10,16 @@ import (
 )
 
 var (
-	settings *winproxy.Settings
+	settings winproxy.Settings
 
 	useProxy   bool
 	useScript  bool
 	autoDetect bool
-)
 
-func init() {
-	slog.SetDefault(slog.New(
-		slog.HandlerOptions{
-			ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
-				if a.Key == slog.TimeKey {
-					a.Key = ""
-				}
-				return a
-			},
-		}.NewTextHandler(os.Stderr),
-	))
-}
+	proxyAddress  string
+	bypassList    string
+	scriptAddress string
+)
 
 var rootCmd = &cobra.Command{
 	Use: "winproxy",
@@ -41,9 +32,12 @@ var rootCmd = &cobra.Command{
 		settings.SetUseProxy(useProxy)
 		settings.SetUseScript(useScript)
 		settings.SetAutoDetect(autoDetect)
+		settings.SetProxyAddress(proxyAddress)
+		settings.SetBypassList(bypassList)
+		settings.SetScriptAddress(scriptAddress)
 
-		if err := winproxy.WriteSettings(settings); err != nil {
-			slog.Error("failed to write settings", err)
+		if err := settings.Apply(); err != nil {
+			slog.Error("failed to apply settings", err)
 		}
 
 		fmt.Println(formatSettings(settings))
@@ -62,9 +56,9 @@ func init() {
 	rootCmd.Flags().BoolVar(&useScript, "use-script", settings.UseScript(), i18n.Localize("use-script", "use setup script"))
 	rootCmd.Flags().BoolVar(&autoDetect, "auto-detect", settings.AutoDetect(), i18n.Localize("auto-detect", "automatically detect settings"))
 
-	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress, i18n.Localize("proxy-address", "proxy address"))
-	rootCmd.Flags().StringVar(&settings.BypassList, "bypass-list", settings.BypassList, i18n.Localize("bypass-list", "bypass list"))
-	rootCmd.Flags().StringVar(&settings.ScriptAddress, "script-address", settings.ScriptAddress, i18n.Localize("script-address", "script address"))
+	rootCmd.Flags().StringVar(&proxyAddress, "proxy-address", settings.ProxyAddress(), i18n.Localize("proxy-address", "proxy address"))
+	rootCmd.Flags().StringVar(&bypassList, "bypass-list", settings.BypassList(), i18n.Localize("bypass-list", "bypass list"))
+	rootCmd.Flags().StringVar(&scriptAddress, "script-address", settings.ScriptAddress(), i18n.Localize("script-address", "script address"))
 }
 
 func flagsChanged(cmd *cobra.Command, names ...string) bool {
