@@ -17,7 +17,7 @@ var (
 	autoDetect bool
 
 	proxyAddress  string
-	bypassList    string
+	bypassList    []string
 	scriptAddress string
 )
 
@@ -57,7 +57,7 @@ func init() {
 	rootCmd.Flags().BoolVar(&autoDetect, "auto-detect", settings.AutoDetect(), i18n.Localize("auto-detect", "automatically detect settings"))
 
 	rootCmd.Flags().StringVar(&proxyAddress, "proxy-address", settings.ProxyAddress(), i18n.Localize("proxy-address", "proxy address"))
-	rootCmd.Flags().StringVar(&bypassList, "bypass-list", settings.BypassList(), i18n.Localize("bypass-list", "bypass list"))
+	rootCmd.Flags().StringSliceVar(&bypassList, "bypass-list", settings.BypassList(), i18n.Localize("bypass-list", "bypass list"))
 	rootCmd.Flags().StringVar(&scriptAddress, "script-address", settings.ScriptAddress(), i18n.Localize("script-address", "script address"))
 }
 
