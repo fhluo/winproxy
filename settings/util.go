@@ -7,7 +7,8 @@ const (
 	RegistryValueName = "DefaultConnectionSettings"
 )
 
-func GetBinary() ([]byte, error) {
+// ReadBinary reads the binary data of DefaultConnectionSettings from the registry.
+func ReadBinary() ([]byte, error) {
 	key, err := registry.OpenKey(registry.CURRENT_USER, RegistryKeyPath, registry.QUERY_VALUE)
 	if err != nil {
 		return nil, err
@@ -24,7 +25,8 @@ func GetBinary() ([]byte, error) {
 	return data, nil
 }
 
-func SetBinary(value []byte) error {
+// WriteBinary writes the binary data of DefaultConnectionSettings to the registry.
+func WriteBinary(data []byte) error {
 	key, err := registry.OpenKey(registry.CURRENT_USER, RegistryKeyPath, registry.SET_VALUE)
 	if err != nil {
 		return err
@@ -33,9 +35,30 @@ func SetBinary(value []byte) error {
 		_ = key.Close()
 	}()
 
-	if err = key.SetBinaryValue(RegistryValueName, value); err != nil {
+	if err = key.SetBinaryValue(RegistryValueName, data); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// Read reads and decodes the binary data of DefaultConnectionSettings from the registry.
+func Read() (*DefaultConnectionSettings, error) {
+	data, err := ReadBinary()
+	if err != nil {
+		return nil, err
+	}
+
+	settings := new(DefaultConnectionSettings)
+	return settings, settings.UnmarshalBinary(data)
+}
+
+// Write encodes and writes the binary data of DefaultConnectionSettings to the registry.
+func Write(settings *DefaultConnectionSettings) error {
+	data, err := settings.MarshalBinary()
+	if err != nil {
+		return err
+	}
+
+	return WriteBinary(data)
 }

@@ -8,12 +8,13 @@ import (
 )
 
 const (
-	FlagDirect     = 1 << iota
-	FlagUseProxy   // use a proxy server
-	FlagUseScript  // use setup script
-	FlagAutoDetect // automatically detect settings
+	FlagDirect       = 1 << iota // do not use a proxy server
+	FlagProxy                    // use an explicitly set proxy server
+	FlagAutoProxyURL             // use an automatic configuration script downloaded from a specified URL
+	FlagAutoDetect               // automatically detect settings
 )
 
+// DefaultConnectionSettings is the struct representation of its registry value.
 type DefaultConnectionSettings struct {
 	Unknown       int32
 	Version       int32
@@ -24,6 +25,7 @@ type DefaultConnectionSettings struct {
 	UnKnown2      [32]byte
 }
 
+// MarshalBinary encodes itself into a binary form and returns the result.
 func (settings *DefaultConnectionSettings) MarshalBinary() (data []byte, err error) {
 	buffer := new(bytes.Buffer)
 	value := reflect.ValueOf(settings).Elem()
@@ -53,6 +55,7 @@ func (settings *DefaultConnectionSettings) MarshalBinary() (data []byte, err err
 	return
 }
 
+// UnmarshalBinary decodes the binary data from the registry.
 func (settings *DefaultConnectionSettings) UnmarshalBinary(data []byte) (err error) {
 	buffer := bytes.NewBuffer(data)
 	value := reflect.ValueOf(settings).Elem()
