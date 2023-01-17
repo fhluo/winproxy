@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"encoding/binary"
 	"reflect"
-	"unsafe"
 )
 
 const (
-	FlagDirect       = 1 << iota // do not use a proxy server
-	FlagProxy                    // use an explicitly set proxy server
-	FlagAutoProxyURL             // use an automatic configuration script downloaded from a specified URL
-	FlagAutoDetect               // automatically detect settings
+	FlagDirect       = 1 << iota
+	FlagProxy        // use an explicitly set proxy server
+	FlagAutoProxyURL // use an automatic configuration script downloaded from a specified URL
+	FlagAutoDetect   // automatically detect settings
 )
 
 // DefaultConnectionSettings is the struct representation of its registry value.
@@ -38,10 +37,7 @@ func (settings *DefaultConnectionSettings) MarshalBinary() (data []byte, err err
 				return
 			}
 
-			if err = binary.Write(
-				buffer, binary.LittleEndian,
-				unsafe.Slice(unsafe.StringData(field.String()), len(field.String())),
-			); err != nil {
+			if err = binary.Write(buffer, binary.LittleEndian, []byte(field.String())); err != nil {
 				return
 			}
 		default:
@@ -74,7 +70,7 @@ func (settings *DefaultConnectionSettings) UnmarshalBinary(data []byte) (err err
 				return
 			}
 
-			field.SetString(unsafe.String(unsafe.SliceData(s), len(s)))
+			field.SetString(string(s))
 		default:
 			if err = binary.Read(buffer, binary.LittleEndian, field.Addr().Interface()); err != nil {
 				return

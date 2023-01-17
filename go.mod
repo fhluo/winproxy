@@ -1,14 +1,14 @@
 module github.com/fhluo/winproxy
 
-go 1.20
+go 1.19
 
 require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/nicksnyder/go-i18n/v2 v2.2.1
 	github.com/spf13/cobra v1.6.1
-	golang.org/x/exp v0.0.0-20230113213754-f9f960f08ad4
+	golang.org/x/exp v0.0.0-20230116083435-1de6713980de
 	golang.org/x/sys v0.4.0
-	golang.org/x/text v0.5.0
+	golang.org/x/text v0.6.0
 )
 
 require (
