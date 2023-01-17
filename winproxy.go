@@ -49,6 +49,10 @@ func (s Settings) setFlag(flag int32, v bool) {
 }
 
 func (s Settings) Apply() error {
+	if s.base == nil {
+		s.base = settings.New()
+	}
+
 	s.base.Version++
 
 	s.setFlag(settings.FlagDirect, s.Direct)

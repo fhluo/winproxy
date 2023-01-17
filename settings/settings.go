@@ -24,6 +24,14 @@ type DefaultConnectionSettings struct {
 	UnKnown2      [32]byte
 }
 
+// New returns a new DefaultConnectionSettings with Unknown set to 70 and Flags set to FlagDirect.
+func New() *DefaultConnectionSettings {
+	return &DefaultConnectionSettings{
+		Unknown: 70,
+		Flags:   FlagDirect,
+	}
+}
+
 // MarshalBinary encodes itself into a binary form and returns the result.
 func (settings *DefaultConnectionSettings) MarshalBinary() (data []byte, err error) {
 	buffer := new(bytes.Buffer)
