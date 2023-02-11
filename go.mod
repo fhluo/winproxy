@@ -7,7 +7,7 @@ require (
 	github.com/nicksnyder/go-i18n/v2 v2.2.1
 	github.com/spf13/cobra v1.6.1
 	golang.org/x/exp v0.0.0-20230116083435-1de6713980de
-	golang.org/x/sys v0.4.0
+	golang.org/x/sys v0.5.0
 	golang.org/x/text v0.6.0
 )
 
