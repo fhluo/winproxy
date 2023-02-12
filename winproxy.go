@@ -8,8 +8,6 @@ import (
 type Settings struct {
 	base *settings.DefaultConnectionSettings
 
-	Direct bool
-
 	Proxy        bool
 	ProxyAddress string
 
@@ -21,6 +19,7 @@ type Settings struct {
 	BypassList []string
 }
 
+// ReadSettings reads the settings from the registry.
 func ReadSettings() (s Settings, err error) {
 	base, err := settings.Read()
 	if err != nil {
@@ -28,7 +27,6 @@ func ReadSettings() (s Settings, err error) {
 	}
 	s = Settings{
 		base:          base,
-		Direct:        base.Flags&settings.FlagDirect != 0,
 		Proxy:         base.Flags&settings.FlagProxy != 0,
 		Script:        base.Flags&settings.FlagAutoProxyURL != 0,
 		AutoDetect:    base.Flags&settings.FlagAutoDetect != 0,
@@ -48,19 +46,23 @@ func (s Settings) setFlag(flag int32, v bool) {
 	}
 }
 
+// Apply writes the settings to the registry.
 func (s Settings) Apply() error {
 	if s.base == nil {
 		s.base = settings.New()
 	}
 
 	s.base.Version++
-
-	s.setFlag(settings.FlagDirect, s.Direct)
 	s.setFlag(settings.FlagProxy, s.Proxy)
 	s.setFlag(settings.FlagAutoProxyURL, s.Script)
 	s.setFlag(settings.FlagAutoDetect, s.AutoDetect)
 	s.base.ProxyAddress = s.ProxyAddress
+
+	for i := range s.BypassList {
+		s.BypassList[i] = strings.TrimSpace(s.BypassList[i])
+	}
 	s.base.BypassList = strings.Join(s.BypassList, ";")
+
 	s.base.ScriptAddress = s.ScriptAddress
 
 	return settings.Write(s.base)

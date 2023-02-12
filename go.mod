@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/BurntSushi/toml v1.2.1
+	github.com/fatih/color v1.14.1
 	github.com/nicksnyder/go-i18n/v2 v2.2.1
 	github.com/spf13/cobra v1.6.1
 	golang.org/x/exp v0.0.0-20230116083435-1de6713980de
@@ -13,6 +14,8 @@ require (
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

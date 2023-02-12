@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/fhluo/winproxy"
 	"github.com/fhluo/winproxy/i18n"
 	"github.com/spf13/cobra"
@@ -17,7 +16,7 @@ var rootCmd = &cobra.Command{
 	Use: "winproxy",
 	Run: func(cmd *cobra.Command, args []string) {
 		if !flagsChanged(cmd, "use-proxy", "use-script", "auto-detect", "proxy-address", "bypass-list", "script-address") {
-			fmt.Println(formatSettings(settings))
+			PrintSettings(settings)
 			return
 		}
 
@@ -25,7 +24,7 @@ var rootCmd = &cobra.Command{
 			slog.Error("failed to apply settings", err)
 		}
 
-		fmt.Println(formatSettings(settings))
+		PrintSettings(settings)
 	},
 }
 

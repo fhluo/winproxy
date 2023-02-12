@@ -1,6 +1,9 @@
-Use proxy     : {{.Proxy}}
-Proxy address : {{.ProxyAddress}}
-Use script    : {{.Script}}
-Script address: {{.ScriptAddress}}
-Bypass list   : {{.BypassList}}
-Auto-detect   : {{.AutoDetect}}
+{{red "Use proxy"}}: {{blue "%v" .Proxy}}
+{{red "Proxy address"}}: {{if eq .ProxyAddress ""}}{{yellow `""`}}{{else}}{{yellow .ProxyAddress}}{{end}}
+{{red "Use script"}}: {{blue "%v" .Script}}
+{{red "Script address"}}: {{if eq .ScriptAddress ""}}{{yellow `""`}}{{else}}{{yellow .ScriptAddress}}{{end}}
+{{red "Auto-detect"}}: {{blue "%v" .AutoDetect}}
+{{red "Bypass list"}}:
+  {{range .BypassList -}}
+    - {{yellow .}}
+  {{end -}}
