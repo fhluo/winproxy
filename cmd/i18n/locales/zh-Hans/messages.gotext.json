@@ -1,0 +1,65 @@
+{
+    "language": "zh-Hans",
+    "messages": [
+        {
+            "id": "use a proxy server",
+            "message": "use a proxy server",
+            "translation": "使用代理服务器"
+        },
+        {
+            "id": "proxy address",
+            "message": "proxy address",
+            "translation": "代理地址"
+        },
+        {
+            "id": "use setup script",
+            "message": "use setup script",
+            "translation": "使用设置脚本"
+        },
+        {
+            "id": "script address",
+            "message": "script address",
+            "translation": "脚本地址"
+        },
+        {
+            "id": "automatically detect settings",
+            "message": "automatically detect settings",
+            "translation": "自动检测设置"
+        },
+        {
+            "id": "bypass list",
+            "message": "bypass list",
+            "translation": "不使用代理服务器的地址列表"
+        },
+        {
+            "id": "Use proxy",
+            "message": "Use proxy",
+            "translation": "使用代理服务器"
+        },
+        {
+            "id": "Proxy address",
+            "message": "Proxy address",
+            "translation": "代理地址"
+        },
+        {
+            "id": "Use script",
+            "message": "Use script",
+            "translation": "使用设置脚本"
+        },
+        {
+            "id": "Script address",
+            "message": "Script address",
+            "translation": "脚本地址"
+        },
+        {
+            "id": "Auto-detect",
+            "message": "Auto-detect",
+            "translation": "自动检测设置"
+        },
+        {
+            "id": "Bypass list",
+            "message": "Bypass list",
+            "translation": "不使用代理服务器的地址列表"
+        }
+    ]
+}

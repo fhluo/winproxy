@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/fhluo/winproxy"
-	"github.com/fhluo/winproxy/i18n"
+	"github.com/fhluo/winproxy/cmd/i18n"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/slog"
 	"os"
@@ -28,6 +28,8 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+//go:generate go run ../tools/gotext -l en-US,zh-Hans -d ./i18n/locales/ -p ./i18n
+
 func init() {
 	var err error
 	settings, err = winproxy.ReadSettings()
@@ -36,13 +38,16 @@ func init() {
 		os.Exit(1)
 	}
 
-	rootCmd.Flags().BoolVar(&settings.Proxy, "use-proxy", settings.Proxy, i18n.Localize("use-proxy", "use a proxy server"))
-	rootCmd.Flags().BoolVar(&settings.Script, "use-script", settings.Script, i18n.Localize("use-script", "use setup script"))
-	rootCmd.Flags().BoolVar(&settings.AutoDetect, "auto-detect", settings.AutoDetect, i18n.Localize("auto-detect", "automatically detect settings"))
+	p := i18n.GetPrinter()
+	rootCmd.Flags().SortFlags = false
+	rootCmd.Flags().BoolVarP(&settings.Proxy, "use-proxy", "p", settings.Proxy, p.Sprintf("use a proxy server"))
+	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress, p.Sprintf("proxy address"))
 
-	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress, i18n.Localize("proxy-address", "proxy address"))
-	rootCmd.Flags().StringSliceVar(&settings.BypassList, "bypass-list", settings.BypassList, i18n.Localize("bypass-list", "bypass list"))
-	rootCmd.Flags().StringVar(&settings.ScriptAddress, "script-address", settings.ScriptAddress, i18n.Localize("script-address", "script address"))
+	rootCmd.Flags().BoolVarP(&settings.Script, "use-script", "s", settings.Script, p.Sprintf("use setup script"))
+	rootCmd.Flags().StringVar(&settings.ScriptAddress, "script-address", settings.ScriptAddress, p.Sprintf("script address"))
+
+	rootCmd.Flags().BoolVarP(&settings.AutoDetect, "auto-detect", "a", settings.AutoDetect, p.Sprintf("automatically detect settings"))
+	rootCmd.Flags().StringSliceVar(&settings.BypassList, "bypass-list", settings.BypassList, p.Sprintf("bypass list"))
 }
 
 func flagsChanged(cmd *cobra.Command, names ...string) bool {

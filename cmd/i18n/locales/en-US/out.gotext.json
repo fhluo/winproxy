@@ -1,0 +1,89 @@
+{
+    "language": "en-US",
+    "messages": [
+        {
+            "id": "use a proxy server",
+            "message": "use a proxy server",
+            "translation": "use a proxy server",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "proxy address",
+            "message": "proxy address",
+            "translation": "proxy address",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "use setup script",
+            "message": "use setup script",
+            "translation": "use setup script",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "script address",
+            "message": "script address",
+            "translation": "script address",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "automatically detect settings",
+            "message": "automatically detect settings",
+            "translation": "automatically detect settings",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "bypass list",
+            "message": "bypass list",
+            "translation": "bypass list",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Use proxy",
+            "message": "Use proxy",
+            "translation": "Use proxy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Proxy address",
+            "message": "Proxy address",
+            "translation": "Proxy address",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Use script",
+            "message": "Use script",
+            "translation": "Use script",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Script address",
+            "message": "Script address",
+            "translation": "Script address",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Auto-detect",
+            "message": "Auto-detect",
+            "translation": "Auto-detect",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Bypass list",
+            "message": "Bypass list",
+            "translation": "Bypass list",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        }
+    ]
+}
