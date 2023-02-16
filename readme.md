@@ -20,3 +20,53 @@ Change Windows system proxy settings
 
 </samp>
 </div>
+
+## Usage
+
+winproxy provides two ways to change Windows system proxy settings. One is through the command line and the other is through programming.
+
+### Through the command line
+
+Use`go install` to install or download and install it manually.
+
+```shell
+go install github.com/fhluo/winproxy/cmd/winproxy@latest
+```
+
+- Use `winproxy` to show the current proxy settings.
+- Use `winproxy help` to view help.
+
+### Through programming
+
+```go
+package main
+
+import (
+	"github.com/fhluo/winproxy"
+	"log"
+)
+
+func main() {
+	// Read
+	settings, err := winproxy.ReadSettings()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Change
+	settings.Proxy = true
+	settings.ProxyAddress = "127.0.0.1:8080"
+	settings.Script = false
+	settings.ScriptAddress = ""
+	settings.AutoDetect = false
+	settings.BypassList = []string{
+		"<local>",
+	}
+
+	// Apply
+	if err = settings.Apply(); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+```
