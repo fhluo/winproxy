@@ -2,6 +2,78 @@
     "language": "en-US",
     "messages": [
         {
+            "id": "Help about any command",
+            "message": "Help about any command",
+            "translation": "Help about any command",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Help provides help for any command in the application.\nSimply type {Name} help [path to command] for full details.",
+            "message": "Help provides help for any command in the application.\nSimply type {Name} help [path to command] for full details.",
+            "translation": "Help provides help for any command in the application.\nSimply type {Name} help [path to command] for full details.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "rootCmd.Name()"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Generate the autocompletion script for the specified shell",
+            "message": "Generate the autocompletion script for the specified shell",
+            "translation": "Generate the autocompletion script for the specified shell",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Generate the autocompletion script for {Name} for the specified shell.\nSee each sub-command's help for details on how to use the generated script.",
+            "message": "Generate the autocompletion script for {Name} for the specified shell.\nSee each sub-command's help for details on how to use the generated script.",
+            "translation": "Generate the autocompletion script for {Name} for the specified shell.\nSee each sub-command's help for details on how to use the generated script.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "rootCmd.Name()"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "this command",
+            "message": "this command",
+            "translation": "this command",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "help for {CommandName}",
+            "message": "help for {CommandName}",
+            "translation": "help for {CommandName}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "CommandName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "commandName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Usage",
             "message": "Usage",
             "translation": "Usage",

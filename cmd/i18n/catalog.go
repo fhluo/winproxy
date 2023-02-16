@@ -39,59 +39,76 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"Additional Commands":    4,
-	"Additional help topics": 7,
-	"Aliases":                1,
-	"Auto-detect":            19,
-	"Available Commands":     3,
-	"Bypass list":            20,
-	"Examples":               2,
-	"Flags":                  5,
-	"Global Flags":           6,
-	"Proxy address":          16,
-	"Script address":         18,
-	"Usage":                  0,
-	"Use \"%s\" for more information about a command.": 8,
-	"Use proxy":                     15,
-	"Use script":                    17,
-	"automatically detect settings": 13,
-	"bypass list":                   14,
-	"proxy address":                 10,
-	"script address":                12,
-	"use a proxy server":            9,
-	"use setup script":              11,
+	"Additional Commands":    10,
+	"Additional help topics": 13,
+	"Aliases":                7,
+	"Auto-detect":            25,
+	"Available Commands":     9,
+	"Bypass list":            26,
+	"Examples":               8,
+	"Flags":                  11,
+	"Generate the autocompletion script for %[1]s for the specified shell.\nSee each sub-command's help for details on how to use the generated script.\n": 3,
+	"Generate the autocompletion script for the specified shell":                                                                                           2,
+	"Global Flags":           12,
+	"Help about any command": 0,
+	"Help provides help for any command in the application.\nSimply type %s help [path to command] for full details.": 1,
+	"Proxy address":  22,
+	"Script address": 24,
+	"Usage":          6,
+	"Use \"%s\" for more information about a command.": 14,
+	"Use proxy":                     21,
+	"Use script":                    23,
+	"automatically detect settings": 19,
+	"bypass list":                   20,
+	"help for %s":                   5,
+	"proxy address":                 16,
+	"script address":                18,
+	"this command":                  4,
+	"use a proxy server":            15,
+	"use setup script":              17,
 }
 
-var en_USIndex = []uint32{ // 22 elements
-	0x00000000, 0x00000006, 0x0000000e, 0x00000017,
-	0x0000002a, 0x0000003e, 0x00000044, 0x00000051,
-	0x00000068, 0x0000009a, 0x000000ad, 0x000000bb,
-	0x000000cc, 0x000000db, 0x000000f9, 0x00000105,
-	0x0000010f, 0x0000011d, 0x00000128, 0x00000137,
-	0x00000143, 0x0000014f,
-} // Size: 112 bytes
+var en_USIndex = []uint32{ // 28 elements
+	0x00000000, 0x00000017, 0x00000089, 0x000000c4,
+	0x0000015c, 0x00000169, 0x00000178, 0x0000017e,
+	0x00000186, 0x0000018f, 0x000001a2, 0x000001b6,
+	0x000001bc, 0x000001c9, 0x000001e0, 0x00000212,
+	0x00000225, 0x00000233, 0x00000244, 0x00000253,
+	0x00000271, 0x0000027d, 0x00000287, 0x00000295,
+	0x000002a0, 0x000002af, 0x000002bb, 0x000002c7,
+} // Size: 136 bytes
 
-const en_USData string = "" + // Size: 335 bytes
-	"\x02Usage\x02Aliases\x02Examples\x02Available Commands\x02Additional Com" +
-	"mands\x02Flags\x02Global Flags\x02Additional help topics\x02Use \x22%[1]" +
-	"s\x22 for more information about a command.\x02use a proxy server\x02pro" +
-	"xy address\x02use setup script\x02script address\x02automatically detect" +
-	" settings\x02bypass list\x02Use proxy\x02Proxy address\x02Use script\x02" +
-	"Script address\x02Auto-detect\x02Bypass list"
+const en_USData string = "" + // Size: 711 bytes
+	"\x02Help about any command\x02Help provides help for any command in the " +
+	"application.\x0aSimply type %[1]s help [path to command] for full detail" +
+	"s.\x02Generate the autocompletion script for the specified shell\x04\x00" +
+	"\x01\x0a\x92\x01\x02Generate the autocompletion script for %[1]s for the" +
+	" specified shell.\x0aSee each sub-command's help for details on how to u" +
+	"se the generated script.\x02this command\x02help for %[1]s\x02Usage\x02A" +
+	"liases\x02Examples\x02Available Commands\x02Additional Commands\x02Flags" +
+	"\x02Global Flags\x02Additional help topics\x02Use \x22%[1]s\x22 for more" +
+	" information about a command.\x02use a proxy server\x02proxy address\x02" +
+	"use setup script\x02script address\x02automatically detect settings\x02b" +
+	"ypass list\x02Use proxy\x02Proxy address\x02Use script\x02Script address" +
+	"\x02Auto-detect\x02Bypass list"
 
-var zh_HansIndex = []uint32{ // 22 elements
-	0x00000000, 0x00000007, 0x0000000e, 0x00000015,
-	0x00000022, 0x0000002f, 0x00000036, 0x00000043,
-	0x00000056, 0x0000008d, 0x000000a3, 0x000000b0,
-	0x000000c3, 0x000000d0, 0x000000e3, 0x0000010b,
-	0x00000121, 0x0000012e, 0x00000141, 0x0000014e,
-	0x00000161, 0x00000189,
-} // Size: 112 bytes
+var zh_HansIndex = []uint32{ // 28 elements
+	0x00000000, 0x0000001c, 0x00000098, 0x000000c4,
+	0x00000150, 0x0000015d, 0x0000016d, 0x00000174,
+	0x0000017b, 0x00000182, 0x0000018f, 0x0000019c,
+	0x000001a3, 0x000001b0, 0x000001c3, 0x000001fa,
+	0x00000210, 0x0000021d, 0x00000230, 0x0000023d,
+	0x00000250, 0x00000278, 0x0000028e, 0x0000029b,
+	0x000002ae, 0x000002bb, 0x000002ce, 0x000002f6,
+} // Size: 136 bytes
 
-const zh_HansData string = "" + // Size: 393 bytes
-	"\x02用法\x02别名\x02例子\x02可用命令\x02附加命令\x02标志\x02全局标志\x02其他帮助主题\x02使用 \x22%[1" +
-	"]s\x22 获取关于某个命令的更多信息\x02使用代理服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置\x02不" +
-	"使用代理服务器的地址列表\x02使用代理服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置\x02不使用代理服务" +
-	"器的地址列表"
+const zh_HansData string = "" + // Size: 758 bytes
+	"\x02关于任意命令的帮助\x02help 为应用程序中的任意命令提供帮助。\x0a只需键入 %[1]s help [path to comma" +
+	"nd] 即可获取全部细节。\x02为指定的 shell 生成自动补全脚本\x04\x00\x01\x0a\x86\x01\x02为 %[1]s " +
+	"生成指定的 shell 自动补全脚本.\x0a关于如何使用生成的脚本的细节，请参见每个子命令的帮助。\x02这个命令\x02%[1]s 的帮" +
+	"助\x02用法\x02别名\x02例子\x02可用命令\x02附加命令\x02标志\x02全局标志\x02其他帮助主题\x02使用 \x22" +
+	"%[1]s\x22 获取关于某个命令的更多信息\x02使用代理服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置" +
+	"\x02不使用代理服务器的地址列表\x02使用代理服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置\x02不使用代" +
+	"理服务器的地址列表"
 
-	// Total table size 952 bytes (0KiB); checksum: CD87AC38
+	// Total table size 1741 bytes (1KiB); checksum: 5422347C

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fhluo/winproxy"
 	"github.com/fhluo/winproxy/cmd/i18n"
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/slog"
 	"os"
@@ -40,6 +41,38 @@ func init() {
 	}
 
 	p := i18n.GetPrinter()
+
+	rootCmd.InitDefaultHelpCmd()
+	helpCmd, ok := lo.Find(rootCmd.Commands(), func(cmd *cobra.Command) bool {
+		return cmd.Name() == "help"
+	})
+	if ok {
+		helpCmd.Short = p.Sprintf("Help about any command")
+		helpCmd.Long = p.Sprintf(`Help provides help for any command in the application.
+Simply type %s help [path to command] for full details.`, rootCmd.Name())
+	}
+
+	rootCmd.InitDefaultCompletionCmd()
+	completionCmd, ok := lo.Find(rootCmd.Commands(), func(cmd *cobra.Command) bool {
+		return cmd.Name() == "completion"
+	})
+	if ok {
+		completionCmd.Short = p.Sprintf("Generate the autocompletion script for the specified shell")
+		completionCmd.Long = p.Sprintf(`Generate the autocompletion script for %[1]s for the specified shell.
+See each sub-command's help for details on how to use the generated script.
+`, rootCmd.Name())
+	}
+
+	rootCmd.InitDefaultHelpFlag()
+	helpFlag := rootCmd.Flags().Lookup("help")
+	if helpFlag != nil {
+		commandName := p.Sprintf("this command")
+		if rootCmd.Name() != "" {
+			commandName = rootCmd.Name()
+		}
+
+		helpFlag.Usage = p.Sprintf("help for %s", commandName)
+	}
 
 	rootCmd.SetUsageTemplate(fmt.Sprintf(`%s:{{if .Runnable}}
   {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}

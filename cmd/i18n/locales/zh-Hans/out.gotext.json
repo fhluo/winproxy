@@ -2,6 +2,66 @@
     "language": "zh-Hans",
     "messages": [
         {
+            "id": "Help about any command",
+            "message": "Help about any command",
+            "translation": "关于任意命令的帮助"
+        },
+        {
+            "id": "Help provides help for any command in the application.\nSimply type {Name} help [path to command] for full details.",
+            "message": "Help provides help for any command in the application.\nSimply type {Name} help [path to command] for full details.",
+            "translation": "help 为应用程序中的任意命令提供帮助。\n只需键入 {Name} help [path to command] 即可获取全部细节。",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "rootCmd.Name()"
+                }
+            ]
+        },
+        {
+            "id": "Generate the autocompletion script for the specified shell",
+            "message": "Generate the autocompletion script for the specified shell",
+            "translation": "为指定的 shell 生成自动补全脚本"
+        },
+        {
+            "id": "Generate the autocompletion script for {Name} for the specified shell.\nSee each sub-command's help for details on how to use the generated script.",
+            "message": "Generate the autocompletion script for {Name} for the specified shell.\nSee each sub-command's help for details on how to use the generated script.",
+            "translation": "为 {Name} 生成指定的 shell 自动补全脚本.\n关于如何使用生成的脚本的细节，请参见每个子命令的帮助。",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "rootCmd.Name()"
+                }
+            ]
+        },
+        {
+            "id": "this command",
+            "message": "this command",
+            "translation": "这个命令"
+        },
+        {
+            "id": "help for {CommandName}",
+            "message": "help for {CommandName}",
+            "translation": "{CommandName} 的帮助",
+            "placeholders": [
+                {
+                    "id": "CommandName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "commandName"
+                }
+            ]
+        },
+        {
             "id": "Usage",
             "message": "Usage",
             "translation": "用法"
