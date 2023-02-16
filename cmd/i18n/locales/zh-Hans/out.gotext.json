@@ -2,6 +2,61 @@
     "language": "zh-Hans",
     "messages": [
         {
+            "id": "Usage",
+            "message": "Usage",
+            "translation": "用法"
+        },
+        {
+            "id": "Aliases",
+            "message": "Aliases",
+            "translation": "别名"
+        },
+        {
+            "id": "Examples",
+            "message": "Examples",
+            "translation": "例子"
+        },
+        {
+            "id": "Available Commands",
+            "message": "Available Commands",
+            "translation": "可用命令"
+        },
+        {
+            "id": "Additional Commands",
+            "message": "Additional Commands",
+            "translation": "附加命令"
+        },
+        {
+            "id": "Flags",
+            "message": "Flags",
+            "translation": "标志"
+        },
+        {
+            "id": "Global Flags",
+            "message": "Global Flags",
+            "translation": "全局标志"
+        },
+        {
+            "id": "Additional help topics",
+            "message": "Additional help topics",
+            "translation": "其他帮助主题"
+        },
+        {
+            "id": "Use \"{CommandPath_command___help}\" for more information about a command.",
+            "message": "Use \"{CommandPath_command___help}\" for more information about a command.",
+            "translation": "使用 \"{CommandPath_command___help}\" 获取关于某个命令的更多信息",
+            "placeholders": [
+                {
+                    "id": "CommandPath_command___help",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "\"{{.CommandPath}} [command] --help\""
+                }
+            ]
+        },
+        {
             "id": "use a proxy server",
             "message": "use a proxy server",
             "translation": "使用代理服务器"

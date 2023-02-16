@@ -39,42 +39,59 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"Auto-detect":                   10,
-	"Bypass list":                   11,
-	"Proxy address":                 7,
-	"Script address":                9,
-	"Use proxy":                     6,
-	"Use script":                    8,
-	"automatically detect settings": 4,
-	"bypass list":                   5,
-	"proxy address":                 1,
-	"script address":                3,
-	"use a proxy server":            0,
-	"use setup script":              2,
+	"Additional Commands":    4,
+	"Additional help topics": 7,
+	"Aliases":                1,
+	"Auto-detect":            19,
+	"Available Commands":     3,
+	"Bypass list":            20,
+	"Examples":               2,
+	"Flags":                  5,
+	"Global Flags":           6,
+	"Proxy address":          16,
+	"Script address":         18,
+	"Usage":                  0,
+	"Use \"%s\" for more information about a command.": 8,
+	"Use proxy":                     15,
+	"Use script":                    17,
+	"automatically detect settings": 13,
+	"bypass list":                   14,
+	"proxy address":                 10,
+	"script address":                12,
+	"use a proxy server":            9,
+	"use setup script":              11,
 }
 
-var en_USIndex = []uint32{ // 13 elements
-	0x00000000, 0x00000013, 0x00000021, 0x00000032,
-	0x00000041, 0x0000005f, 0x0000006b, 0x00000075,
-	0x00000083, 0x0000008e, 0x0000009d, 0x000000a9,
-	0x000000b5,
-} // Size: 76 bytes
+var en_USIndex = []uint32{ // 22 elements
+	0x00000000, 0x00000006, 0x0000000e, 0x00000017,
+	0x0000002a, 0x0000003e, 0x00000044, 0x00000051,
+	0x00000068, 0x0000009a, 0x000000ad, 0x000000bb,
+	0x000000cc, 0x000000db, 0x000000f9, 0x00000105,
+	0x0000010f, 0x0000011d, 0x00000128, 0x00000137,
+	0x00000143, 0x0000014f,
+} // Size: 112 bytes
 
-const en_USData string = "" + // Size: 181 bytes
-	"\x02use a proxy server\x02proxy address\x02use setup script\x02script ad" +
-	"dress\x02automatically detect settings\x02bypass list\x02Use proxy\x02Pr" +
-	"oxy address\x02Use script\x02Script address\x02Auto-detect\x02Bypass lis" +
-	"t"
+const en_USData string = "" + // Size: 335 bytes
+	"\x02Usage\x02Aliases\x02Examples\x02Available Commands\x02Additional Com" +
+	"mands\x02Flags\x02Global Flags\x02Additional help topics\x02Use \x22%[1]" +
+	"s\x22 for more information about a command.\x02use a proxy server\x02pro" +
+	"xy address\x02use setup script\x02script address\x02automatically detect" +
+	" settings\x02bypass list\x02Use proxy\x02Proxy address\x02Use script\x02" +
+	"Script address\x02Auto-detect\x02Bypass list"
 
-var zh_HansIndex = []uint32{ // 13 elements
-	0x00000000, 0x00000016, 0x00000023, 0x00000036,
-	0x00000043, 0x00000056, 0x0000007e, 0x00000094,
-	0x000000a1, 0x000000b4, 0x000000c1, 0x000000d4,
-	0x000000fc,
-} // Size: 76 bytes
+var zh_HansIndex = []uint32{ // 22 elements
+	0x00000000, 0x00000007, 0x0000000e, 0x00000015,
+	0x00000022, 0x0000002f, 0x00000036, 0x00000043,
+	0x00000056, 0x0000008d, 0x000000a3, 0x000000b0,
+	0x000000c3, 0x000000d0, 0x000000e3, 0x0000010b,
+	0x00000121, 0x0000012e, 0x00000141, 0x0000014e,
+	0x00000161, 0x00000189,
+} // Size: 112 bytes
 
-const zh_HansData string = "" + // Size: 252 bytes
-	"\x02使用代理服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置\x02不使用代理服务器的地址列表\x02使用代理" +
-	"服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置\x02不使用代理服务器的地址列表"
+const zh_HansData string = "" + // Size: 393 bytes
+	"\x02用法\x02别名\x02例子\x02可用命令\x02附加命令\x02标志\x02全局标志\x02其他帮助主题\x02使用 \x22%[1" +
+	"]s\x22 获取关于某个命令的更多信息\x02使用代理服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置\x02不" +
+	"使用代理服务器的地址列表\x02使用代理服务器\x02代理地址\x02使用设置脚本\x02脚本地址\x02自动检测设置\x02不使用代理服务" +
+	"器的地址列表"
 
-	// Total table size 585 bytes (0KiB); checksum: 56EAEC94
+	// Total table size 952 bytes (0KiB); checksum: CD87AC38

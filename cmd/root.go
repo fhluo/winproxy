@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/fhluo/winproxy"
 	"github.com/fhluo/winproxy/cmd/i18n"
 	"github.com/spf13/cobra"
@@ -39,6 +40,48 @@ func init() {
 	}
 
 	p := i18n.GetPrinter()
+
+	rootCmd.SetUsageTemplate(fmt.Sprintf(`%s:{{if .Runnable}}
+  {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
+  {{.CommandPath}} [command]{{end}}{{if gt (len .Aliases) 0}}
+
+%s:
+  {{.NameAndAliases}}{{end}}{{if .HasExample}}
+
+%s:
+{{.Example}}{{end}}{{if .HasAvailableSubCommands}}{{$cmds := .Commands}}{{if eq (len .Groups) 0}}
+
+%s:{{range $cmds}}{{if (or .IsAvailableCommand (eq .Name "help"))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{else}}{{range $group := .Groups}}
+
+{{.Title}}{{range $cmds}}{{if (and (eq .GroupID $group.ID) (or .IsAvailableCommand (eq .Name "help")))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{if not .AllChildCommandsHaveGroup}}
+
+%s:{{range $cmds}}{{if (and (eq .GroupID "") (or .IsAvailableCommand (eq .Name "help")))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{end}}{{end}}{{if .HasAvailableLocalFlags}}
+
+%s:
+{{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasAvailableInheritedFlags}}
+
+%s:
+{{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasHelpSubCommands}}
+
+%s:{{range .Commands}}{{if .IsAdditionalHelpTopicCommand}}
+  {{rpad .CommandPath .CommandPathPadding}} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
+
+%s{{end}}
+`,
+		p.Sprintf("Usage"),
+		p.Sprintf("Aliases"),
+		p.Sprintf("Examples"),
+		p.Sprintf("Available Commands"),
+		p.Sprintf("Additional Commands"),
+		p.Sprintf("Flags"),
+		p.Sprintf("Global Flags"),
+		p.Sprintf("Additional help topics"),
+		p.Sprintf(`Use "%s" for more information about a command.`, "{{.CommandPath}} [command] --help"),
+	))
+
 	rootCmd.Flags().SortFlags = false
 	rootCmd.Flags().BoolVarP(&settings.Proxy, "use-proxy", "p", settings.Proxy, p.Sprintf("use a proxy server"))
 	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress, p.Sprintf("proxy address"))
