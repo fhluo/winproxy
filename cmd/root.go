@@ -30,7 +30,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-//go:generate go run ../tools/gotext -l en-US,zh-Hans -d ./i18n/locales/ -p ./i18n
+//go:generate go run github.com/fhluo/i18n/tools/gotext@latest -l en-US,zh-Hans -d ./i18n/locales/ -p ./i18n
 
 func init() {
 	var err error
