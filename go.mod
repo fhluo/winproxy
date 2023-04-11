@@ -7,7 +7,7 @@ require (
 	github.com/samber/lo v1.37.0
 	github.com/spf13/cobra v1.6.1
 	golang.org/x/exp v0.0.0-20230116083435-1de6713980de
-	golang.org/x/sys v0.5.0
+	golang.org/x/sys v0.7.0
 	golang.org/x/text v0.7.0
 )
 
