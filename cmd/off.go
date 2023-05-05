@@ -11,7 +11,7 @@ var offCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		settings.Proxy = false
 		if err := settings.Apply(); err != nil {
-			slog.Error("failed to apply settings", err)
+			slog.Error("failed to apply settings", "err", err)
 		}
 	},
 }

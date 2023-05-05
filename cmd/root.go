@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		if err := settings.Apply(); err != nil {
-			slog.Error("failed to apply settings", err)
+			slog.Error("failed to apply settings", "err", err)
 		}
 
 		PrintSettings(settings)
@@ -36,7 +36,7 @@ func init() {
 	var err error
 	settings, err = winproxy.ReadSettings()
 	if err != nil {
-		slog.Error("failed to read settings", err)
+		slog.Error("failed to read settings", "err", err)
 		os.Exit(1)
 	}
 
@@ -137,7 +137,7 @@ func flagsChanged(cmd *cobra.Command, names ...string) bool {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		slog.Error("failed to execute root command", err)
+		slog.Error("failed to execute root command", "err", err)
 		os.Exit(1)
 	}
 }

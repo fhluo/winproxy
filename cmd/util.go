@@ -38,12 +38,12 @@ func PrintSettings(s winproxy.Settings) {
 	).Parse(templateStr))
 
 	if err := settingsTemplate.Execute(w, s); err != nil {
-		slog.Error("failed to execute settings template", err)
+		slog.Error("failed to execute settings template", "err", err)
 		os.Exit(1)
 	}
 
 	if err := w.Flush(); err != nil {
-		slog.Error("failed to flush", err)
+		slog.Error("failed to flush", "err", err)
 		os.Exit(1)
 	}
 }

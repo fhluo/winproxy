@@ -23,7 +23,7 @@ func GetLanguages() []string {
 	if err != nil {
 		languages, err = windows.GetSystemPreferredUILanguages(windows.MUI_LANGUAGE_NAME)
 		if err != nil {
-			slog.Error("failed to get system preferred UI languages", err)
+			slog.Error("failed to get system preferred UI languages", "err", err)
 			os.Exit(1)
 		}
 	}
