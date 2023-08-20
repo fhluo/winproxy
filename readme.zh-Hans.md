@@ -23,11 +23,11 @@
 
 ## 用法
 
-winproxy 提供了两种方式更改 Windows 系统的代理配置。一种是通过命令行，另一种是通过编程。
+winproxy 提供了两种方式来更改 Windows 系统的代理配置：通过命令行或通过代码。
 
-### 通过命令行
+### 命令行
 
-可以使用 `go install` 命令安装，或者手动下载并安装。
+你可以使用 `go install` 命令安装 winproxy，也可以手动下载和安装它。
 
 ```shell
 go install github.com/fhluo/winproxy/cmd/winproxy@latest
@@ -36,7 +36,7 @@ go install github.com/fhluo/winproxy/cmd/winproxy@latest
 - 使用 `winproxy` 命令显示当前的代理配置。
 - 使用 `winproxy help` 命令查看帮助。
 
-### 通过编程
+### 代码
 
 ```go
 package main
@@ -47,13 +47,13 @@ import (
 )
 
 func main() {
-	// 读取
+	// 读取当前的代理配置
 	settings, err := winproxy.ReadSettings()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	// 更改
+	// 更改代理配置
 	settings.Proxy = true
 	settings.ProxyAddress = "127.0.0.1:8080"
 	settings.Script = false
@@ -63,7 +63,7 @@ func main() {
 		"<local>",
 	}
 
-	// 应用
+	// 应用代理配置
 	if err = settings.Apply(); err != nil {
 		log.Fatalln(err)
 	}
