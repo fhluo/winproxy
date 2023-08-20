@@ -137,7 +137,7 @@ func flagsChanged(cmd *cobra.Command, names ...string) bool {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		slog.Error("failed to execute root command", "err", err)
+		slog.Error(err.Error())
 		os.Exit(1)
 	}
 }
