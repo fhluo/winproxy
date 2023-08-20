@@ -1,10 +1,10 @@
 package i18n
 
 import (
-	"golang.org/x/exp/slog"
 	"golang.org/x/sys/windows"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
+	"log/slog"
 	"os"
 )
 

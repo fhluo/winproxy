@@ -6,7 +6,7 @@ import (
 	"github.com/fhluo/winproxy/cmd/i18n"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
-	"golang.org/x/exp/slog"
+	"log/slog"
 	"os"
 )
 

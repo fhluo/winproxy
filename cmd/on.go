@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"golang.org/x/exp/slog"
+	"log/slog"
 )
 
 var onCmd = &cobra.Command{

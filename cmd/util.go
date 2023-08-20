@@ -6,7 +6,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/fhluo/winproxy"
 	"github.com/fhluo/winproxy/cmd/i18n"
-	"golang.org/x/exp/slog"
+	"log/slog"
 	"os"
 	"text/template"
 )
