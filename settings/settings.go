@@ -15,13 +15,13 @@ const (
 
 // DefaultConnectionSettings is the struct representation of its registry value.
 type DefaultConnectionSettings struct {
-	Unknown       int32
-	Version       int32
-	Flags         int32
-	ProxyAddress  string
-	BypassList    string
-	ScriptAddress string
-	UnKnown2      [32]byte
+	Unknown       int32    `json:"unknown"`
+	Version       int32    `json:"version"`
+	Flags         int32    `json:"flags"`
+	ProxyAddress  string   `json:"proxy_address"`
+	BypassList    string   `json:"bypass_list"`
+	ScriptAddress string   `json:"script_address"`
+	UnKnown1      [32]byte `json:"unknown1"`
 }
 
 // New returns a new DefaultConnectionSettings with Unknown set to 70 and Flags set to FlagDirect.
