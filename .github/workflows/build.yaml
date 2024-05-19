@@ -24,11 +24,14 @@ jobs:
         with:
           go-version: 'stable'
 
+      - name: Set up Task
+        run: go install github.com/go-task/task/v3/cmd/task@latest
+
       - name: Build
-        run: go build -v ./cmd/winproxy
+        run: task build
 
       - name: Test
-        run: go test -v ./...
+        run: task test
 
       - name: Release
         uses: softprops/action-gh-release@v1
