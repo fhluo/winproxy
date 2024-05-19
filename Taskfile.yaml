@@ -7,8 +7,12 @@ tasks:
 
   build:
     cmds:
-      - go build ./cmd/winproxy
+      - go build -v ./cmd/winproxy
 
   install:
     cmds:
       - go install ./cmd/winproxy
+
+  test:
+    cmds:
+      - go test -v ./...
