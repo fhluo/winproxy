@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/fhluo/winproxy"
 	"github.com/fhluo/winproxy/cmd/i18n"
+	"github.com/samber/lo"
 	"strings"
 )
 
@@ -18,8 +19,19 @@ type Settings struct {
 	BypassList    []string
 }
 
-func (s Settings) BaseInfoTable() *table.Table {
+func (s Settings) BaseInfoRows() [][]string {
 	p := i18n.GetPrinter()
+	return [][]string{
+		{p.Sprintf("Use proxy"), s.Proxy},
+		{p.Sprintf("Proxy address"), s.ProxyAddress},
+		{p.Sprintf("Use script"), s.Script},
+		{p.Sprintf("Script address"), s.ScriptAddress},
+		{p.Sprintf("Auto-detect"), s.AutoDetect},
+	}
+}
+
+func (s Settings) BaseInfoTable() *table.Table {
+	rows := s.BaseInfoRows()
 
 	t := table.New()
 
@@ -34,17 +46,17 @@ func (s Settings) BaseInfoTable() *table.Table {
 		}
 	})
 
-	t.Row(p.Sprintf("Use proxy"), s.Proxy)
-	t.Row(p.Sprintf("Proxy address"), s.ProxyAddress)
-	t.Row(p.Sprintf("Use script"), s.Script)
-	t.Row(p.Sprintf("Script address"), s.ScriptAddress)
-	t.Row(p.Sprintf("Auto-detect"), s.AutoDetect)
+	t.Rows(rows...)
 
 	return t
 }
 
 func (s Settings) BypassListTable() *table.Table {
 	p := i18n.GetPrinter()
+	headers := []string{p.Sprintf("Bypass list")}
+	rows := lo.Map(s.BypassList, func(item string, _ int) []string {
+		return []string{item}
+	})
 
 	t := table.New()
 
@@ -59,13 +71,7 @@ func (s Settings) BypassListTable() *table.Table {
 		}
 	})
 
-	t.Headers(p.Sprintf("Bypass list"))
-
-	for _, address := range s.BypassList {
-		t.Row(address)
-	}
-
-	return t
+	return t.Headers(headers...).Rows(rows...)
 }
 
 func (s Settings) String() string {
@@ -92,8 +98,4 @@ func Render(s winproxy.Settings) Settings {
 		AutoDetect:    CheckMark(s.AutoDetect),
 		BypassList:    s.BypassList,
 	}
-}
-
-func PrintSettings(s winproxy.Settings) {
-	fmt.Println(Render(s))
 }

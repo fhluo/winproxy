@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 	Use: "winproxy",
 	Run: func(cmd *cobra.Command, args []string) {
 		if !flagsChanged(cmd, "use-proxy", "use-script", "auto-detect", "proxy-address", "bypass-list", "script-address") {
-			PrintSettings(settings)
+			fmt.Println(Render(settings))
 			return
 		}
 
@@ -26,7 +26,7 @@ var rootCmd = &cobra.Command{
 			slog.Error("failed to apply settings", "err", err)
 		}
 
-		PrintSettings(settings)
+		fmt.Println(Render(settings))
 	},
 }
 
