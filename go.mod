@@ -1,6 +1,6 @@
 module github.com/fhluo/winproxy
 
-go 1.21
+go 1.23
 
 require (
 	github.com/charmbracelet/lipgloss v0.13.0

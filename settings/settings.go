@@ -3,6 +3,7 @@ package settings
 import (
 	"bytes"
 	"encoding/binary"
+	"iter"
 	"reflect"
 )
 
@@ -32,20 +33,25 @@ func New() *DefaultConnectionSettings {
 	}
 }
 
+func (settings *DefaultConnectionSettings) fields() iter.Seq[reflect.Value] {
+	return func(yield func(reflect.Value) bool) {
+		value := reflect.ValueOf(settings).Elem()
+		for i := 0; i < value.NumField(); i++ {
+			if !yield(value.Field(i)) {
+				break
+			}
+		}
+	}
+}
+
 // MarshalBinary encodes itself into a binary form and returns the result.
 func (settings *DefaultConnectionSettings) MarshalBinary() (data []byte, err error) {
 	buffer := new(bytes.Buffer)
-	value := reflect.ValueOf(settings).Elem()
 
-	for i := 0; i < value.NumField(); i++ {
-		field := value.Field(i)
+	for field := range settings.fields() {
 		switch field.Kind() {
 		case reflect.String:
-			if err = binary.Write(buffer, binary.LittleEndian, int32(len(field.String()))); err != nil {
-				return
-			}
-
-			if err = binary.Write(buffer, binary.LittleEndian, []byte(field.String())); err != nil {
+			if err = writeString(buffer, field.String()); err != nil {
 				return
 			}
 		default:
@@ -62,23 +68,17 @@ func (settings *DefaultConnectionSettings) MarshalBinary() (data []byte, err err
 // UnmarshalBinary decodes the binary data from the registry.
 func (settings *DefaultConnectionSettings) UnmarshalBinary(data []byte) (err error) {
 	buffer := bytes.NewBuffer(data)
-	value := reflect.ValueOf(settings).Elem()
 
-	for i := 0; i < value.NumField(); i++ {
-		field := value.Field(i)
+	for field := range settings.fields() {
 		switch field.Kind() {
 		case reflect.String:
-			var size int32
-			if err = binary.Read(buffer, binary.LittleEndian, &size); err != nil {
+			var s string
+			s, err = readString(buffer)
+			if err != nil {
 				return
 			}
 
-			s := make([]byte, size)
-			if err = binary.Read(buffer, binary.LittleEndian, s); err != nil {
-				return
-			}
-
-			field.SetString(string(s))
+			field.SetString(s)
 		default:
 			if err = binary.Read(buffer, binary.LittleEndian, field.Addr().Interface()); err != nil {
 				return

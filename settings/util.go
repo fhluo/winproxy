@@ -1,6 +1,11 @@
 package settings
 
-import "golang.org/x/sys/windows/registry"
+import (
+	"encoding/binary"
+	"golang.org/x/sys/windows/registry"
+	"io"
+	"unsafe"
+)
 
 const (
 	RegistryKeyPath   = `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet settings\Connections`
@@ -61,4 +66,26 @@ func Write(settings *DefaultConnectionSettings) error {
 	}
 
 	return WriteBinary(data)
+}
+
+func readString(r io.Reader) (string, error) {
+	var size int32
+	if err := binary.Read(r, binary.LittleEndian, &size); err != nil {
+		return "", err
+	}
+
+	s := make([]byte, size)
+	if err := binary.Read(r, binary.LittleEndian, s); err != nil {
+		return "", err
+	}
+
+	return unsafe.String(unsafe.SliceData(s), size), nil
+}
+
+func writeString(w io.Writer, s string) error {
+	if err := binary.Write(w, binary.LittleEndian, int32(len(s))); err != nil {
+		return err
+	}
+
+	return binary.Write(w, binary.LittleEndian, unsafe.Slice(unsafe.StringData(s), len(s)))
 }
