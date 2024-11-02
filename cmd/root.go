@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"github.com/fhluo/winproxy"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/samber/lo"
@@ -9,6 +10,7 @@ import (
 	"log/slog"
 	"os"
 	"strings"
+	"text/template"
 )
 
 var (
@@ -41,6 +43,18 @@ func init() {
 		os.Exit(1)
 	}
 
+	cobra.AddTemplateFuncs(template.FuncMap{
+		"FgHiWhite": color.New(color.FgHiWhite).SprintFunc(),
+	})
+
+	localizeHelpCommand()
+	localizeHelpFlag()
+	localizeCompletionCommand()
+	localizeUsageTemplate()
+	initFlags()
+}
+
+func localizeHelpCommand() {
 	rootCmd.InitDefaultHelpCmd()
 	helpCmd, ok := lo.Find(rootCmd.Commands(), func(cmd *cobra.Command) bool {
 		return cmd.Name() == "help"
@@ -55,7 +69,9 @@ Simply type {{.CommandName}} help [path to command] for full details.`},
 			},
 		})
 	}
+}
 
+func localizeCompletionCommand() {
 	rootCmd.InitDefaultCompletionCmd()
 	completionCmd, ok := lo.Find(rootCmd.Commands(), func(cmd *cobra.Command) bool {
 		return cmd.Name() == "completion"
@@ -74,7 +90,9 @@ See each sub-command's help for details on how to use the generated script.
 			},
 		})
 	}
+}
 
+func localizeHelpFlag() {
 	rootCmd.InitDefaultHelpFlag()
 	helpFlag := rootCmd.Flags().Lookup("help")
 	if helpFlag != nil {
@@ -90,19 +108,46 @@ See each sub-command's help for details on how to use the generated script.
 			},
 		})
 	}
+}
 
-	template := rootCmd.UsageTemplate()
+func localizeUsageTemplate() {
+	usageTemplate := rootCmd.UsageTemplate()
 
-	template = strings.NewReplacer([]string{
-		"Usage:", Localize(&i18n.Message{ID: "Usage:", Other: "Usage:"}),
-		"Aliases:", Localize(&i18n.Message{ID: "Aliases:", Other: "Aliases:"}),
-		"Examples:", Localize(&i18n.Message{ID: "Examples:", Other: "Examples:"}),
-		"Available Commands:", Localize(&i18n.Message{ID: "Available Commands:", Other: "Available Commands:"}),
-		"Additional Commands:", Localize(&i18n.Message{ID: "Additional Commands:", Other: "Additional Commands:"}),
-		"Flags:", Localize(&i18n.Message{ID: "Flags:", Other: "Flags:"}),
-		"Global Flags:", Localize(&i18n.Message{ID: "Global Flags:", Other: "Global Flags:"}),
-		"Additional help topics:", Localize(&i18n.Message{ID: "Additional help topics:", Other: "Additional help topics:"}),
-		`Use "{{.CommandPath}} [command] --help" for more information about a command.`, LocalizeConfig(&i18n.LocalizeConfig{
+	usageTemplate = strings.NewReplacer([]string{
+		"Usage:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Usage:", Other: "Usage:"}),
+		),
+		"Aliases:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Aliases:", Other: "Aliases:"}),
+		),
+		"Examples:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Examples:", Other: "Examples:"}),
+		),
+		"Available Commands:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Available Commands:", Other: "Available Commands:"}),
+		),
+		"Additional Commands:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Additional Commands:", Other: "Additional Commands:"}),
+		),
+		"Flags:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Flags:", Other: "Flags:"}),
+		),
+		"Global Flags:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Global Flags:", Other: "Global Flags:"}),
+		),
+		"Additional help topics:", fmt.Sprintf(
+			`{{FgHiWhite "%s"}}`,
+			Localize(&i18n.Message{ID: "Additional help topics:", Other: "Additional help topics:"}),
+		),
+		`Use "{{.CommandPath}} [command] --help" for more information about a command.`,
+		LocalizeConfig(&i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{
 				ID:    "Help",
 				Other: `Use {{.Help}} for more information about a command.`,
@@ -111,35 +156,49 @@ See each sub-command's help for details on how to use the generated script.
 				"Help": `"{{.CommandPath}} [command] --help"`,
 			},
 		}),
-	}...).Replace(template)
+	}...).Replace(usageTemplate)
 
-	rootCmd.SetUsageTemplate(template)
+	rootCmd.SetUsageTemplate(usageTemplate)
+}
 
+func initFlags() {
 	rootCmd.Flags().SortFlags = false
-	rootCmd.Flags().BoolVarP(&settings.Proxy, "use-proxy", "p", settings.Proxy, Localize(&i18n.Message{
-		ID:    "use-proxy",
-		Other: "use a proxy server",
-	}))
-	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress, Localize(&i18n.Message{
-		ID:    "proxy-address",
-		Other: "proxy address",
-	}))
-	rootCmd.Flags().BoolVarP(&settings.Script, "use-script", "s", settings.Script, Localize(&i18n.Message{
-		ID:    "use-script",
-		Other: "use setup script",
-	}))
-	rootCmd.Flags().StringVar(&settings.ScriptAddress, "script-address", settings.ScriptAddress, Localize(&i18n.Message{
-		ID:    "script-address",
-		Other: "script address",
-	}))
-	rootCmd.Flags().BoolVarP(&settings.AutoDetect, "auto-detect", "a", settings.AutoDetect, Localize(&i18n.Message{
-		ID:    "auto-detect",
-		Other: "automatically detect settings",
-	}))
-	rootCmd.Flags().StringSliceVar(&settings.BypassList, "bypass-list", settings.BypassList, Localize(&i18n.Message{
-		ID:    "bypass-list",
-		Other: "bypass list",
-	}))
+	rootCmd.Flags().BoolVarP(&settings.Proxy, "use-proxy", "p", settings.Proxy,
+		Localize(&i18n.Message{
+			ID:    "use-proxy",
+			Other: "use a proxy server",
+		}),
+	)
+	rootCmd.Flags().StringVar(&settings.ProxyAddress, "proxy-address", settings.ProxyAddress,
+		Localize(&i18n.Message{
+			ID:    "proxy-address",
+			Other: "proxy address",
+		}),
+	)
+	rootCmd.Flags().BoolVarP(&settings.Script, "use-script", "s", settings.Script,
+		Localize(&i18n.Message{
+			ID:    "use-script",
+			Other: "use setup script",
+		}),
+	)
+	rootCmd.Flags().StringVar(&settings.ScriptAddress, "script-address", settings.ScriptAddress,
+		Localize(&i18n.Message{
+			ID:    "script-address",
+			Other: "script address",
+		}),
+	)
+	rootCmd.Flags().BoolVarP(&settings.AutoDetect, "auto-detect", "a", settings.AutoDetect,
+		Localize(&i18n.Message{
+			ID:    "auto-detect",
+			Other: "automatically detect settings",
+		}),
+	)
+	rootCmd.Flags().StringSliceVar(&settings.BypassList, "bypass-list", settings.BypassList,
+		Localize(&i18n.Message{
+			ID:    "bypass-list",
+			Other: "bypass list",
+		}),
+	)
 }
 
 func flagsChanged(cmd *cobra.Command, names ...string) bool {
