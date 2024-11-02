@@ -1,0 +1,16 @@
+version: 3
+
+tasks:
+  setup:
+    cmd: go install -v github.com/nicksnyder/go-i18n/v2/goi18n@latest
+
+  update:
+    cmds:
+      - goi18n extract -outdir locales
+      - goi18n merge -outdir locales locales/active.*.toml locales/translate.*.toml
+
+  pub:
+    dir: locales
+    cmds:
+      - cp active.en.toml en.toml
+      - cp active.zh-Hans.toml zh-Hans.toml
