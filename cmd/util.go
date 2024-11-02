@@ -21,7 +21,6 @@ type Settings struct {
 }
 
 func (s Settings) BaseInfoRows() [][]string {
-	//p := i18n.GetPrinter()
 	return [][]string{
 		{Localize(&i18n.Message{ID: "Use proxy", Other: "Use proxy"}), s.Proxy},
 		{Localize(&i18n.Message{ID: "Proxy address", Other: "Proxy address"}), s.ProxyAddress},
@@ -53,7 +52,6 @@ func (s Settings) BaseInfoTable() *table.Table {
 }
 
 func (s Settings) BypassListTable() *table.Table {
-	//p := i18n.GetPrinter()
 	headers := []string{Localize(&i18n.Message{ID: "Bypass list", Other: "Bypass list"})}
 	rows := lo.Map(s.BypassList, func(item string, _ int) []string {
 		return []string{item}
