@@ -21,20 +21,29 @@
 </samp>
 </div>
 
-## 用法
+## 介绍
 
-winproxy 提供了两种方式来更改 Windows 系统的代理配置：通过命令行或通过代码。
+`winproxy` 是一个用于更改 Windows 系统代理设置的工具。它提供了通过命令行和代码两种方式来管理代理配置。
 
-### 命令行
+## 安装
 
-你可以使用 `go install` 命令安装 winproxy，也可以手动下载和安装它。
+你可以使用 `go install` 命令安装 `winproxy`，也可以手动下载和安装它。
 
 ```shell
 go install github.com/fhluo/winproxy/cmd/winproxy@latest
 ```
 
+## 使用方法
+
+### 命令行
+
 - 使用 `winproxy` 命令显示当前的代理配置。
 - 使用 `winproxy help` 命令查看帮助。
+
+#### 示例
+
+- 启用代理：`winproxy on`
+- 禁用代理：`winproxy off`
 
 ### 代码
 
