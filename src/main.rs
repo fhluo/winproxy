@@ -3,22 +3,28 @@ use winproxy::{DefaultConnectionSettings, Flags};
 
 #[derive(Parser, Debug)]
 struct Args {
-    #[arg(short = 'p', long)]
+    /// Use a proxy server
+    #[arg(short = 'p', long, value_name = "BOOLEAN")]
     use_proxy: Option<bool>,
 
-    #[arg(short = 's', long)]
+    /// Use setup script
+    #[arg(short = 's', long, value_name = "BOOLEAN")]
     use_script: Option<bool>,
 
-    #[arg(short = 'a', long)]
+    /// Automatically detect settings
+    #[arg(short = 'a', long, value_name = "BOOLEAN")]
     auto_detect: Option<bool>,
 
-    #[arg(long)]
+    /// Proxy address
+    #[arg(long, value_name = "ADDRESS")]
     proxy_address: Option<String>,
 
-    #[arg(long)]
+    /// Script address
+    #[arg(long, value_name = "ADDRESS")]
     script_address: Option<String>,
 
-    #[arg(long)]
+    /// Bypass list
+    #[arg(long, value_name = "ADDRESS")]
     bypass_list: Option<Vec<String>>,
 }
 
