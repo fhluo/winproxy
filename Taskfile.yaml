@@ -8,7 +8,7 @@ includes:
 tasks:
   run:
     cmds:
-      - go run ./cmd/winproxy
+      - go run ./cmd/winproxy {{.CLI_ARGS}}
 
   build:
     cmds:
