@@ -25,14 +25,14 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    if args
-        .use_proxy
-        .and(args.use_script)
-        .and(args.auto_detect)
-        .and(args.proxy_address.as_ref())
-        .and(args.script_address.as_ref())
-        .and(args.bypass_list.as_ref())
-        .is_none() {
+    if matches!(args, Args {
+        use_proxy: None,
+        use_script: None,
+        auto_detect: None,
+        proxy_address: None,
+        script_address: None,
+        bypass_list: None
+    }) {
         return;
     }
 
