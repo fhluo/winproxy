@@ -1,0 +1,107 @@
+["Additional Commands:"]
+hash = "sha1-396bb3a0f78d7acd4e056e7ac947cf62f576f771"
+other = "其他命令："
+
+["Additional help topics:"]
+hash = "sha1-20dfa68e71bc3f3a5dd7da0416ba1ed3e9c214ac"
+other = "其他帮助主题："
+
+["Aliases:"]
+hash = "sha1-076f5501873ca3aa6b40649ccd421b0dbc106f67"
+other = "别名："
+
+[Auto-detect]
+hash = "sha1-7dbcac72248ee277cf1fb28b3d3aaa2ba5719a89"
+other = "自动检测设置"
+
+["Available Commands:"]
+hash = "sha1-e166b7acfe36c7745369b125160317a2ba9ad50b"
+other = "可用命令："
+
+["Bypass list"]
+hash = "sha1-c9c65026fb92977c3cad363964e2bfe4e2681d83"
+other = "不使用代理服务器的地址列表"
+
+["Examples:"]
+hash = "sha1-fb3447b632f6a431215776dcf254a01001a40c4f"
+other = "例子："
+
+["Flags:"]
+hash = "sha1-2a476f86875fb2b5839b81f4968c0e87deb18e61"
+other = "标志："
+
+["Global Flags:"]
+hash = "sha1-281f2a9eb12c3751de5fa88b6e5a361bdca3587e"
+other = "全局标志："
+
+[Help]
+hash = "sha1-033820280a44ef77e4101615fa2494a5ffeb9b58"
+other = "使用 {{.Help}} 命令获取有关命令的更多信息。"
+
+["Proxy address"]
+hash = "sha1-da7c90367ca13e65566b578cba9ff33ec80f66d5"
+other = "代理地址"
+
+["Script address"]
+hash = "sha1-342c9101bfdfe92571d9510046d2e1e66de21232"
+other = "脚本地址"
+
+["Usage:"]
+hash = "sha1-861a0e430ffac5e4ae6e11b7a947f2c32d388cf4"
+other = "用法："
+
+["Use proxy"]
+hash = "sha1-6886dfaa823bd7996d97e9b6ecc41e16092bacde"
+other = "使用代理服务器"
+
+["Use script"]
+hash = "sha1-723a476f59fd7655cf8acc5e3b49f752e16785de"
+other = "使用设置脚本"
+
+[auto-detect]
+hash = "sha1-8dd86b97efe61ff200499720c94c9631e28914da"
+other = "自动检测设置"
+
+[bypass-list]
+hash = "sha1-9bcbe9b95092863c58254857128281f79d663c44"
+other = "不使用代理服务器的地址列表"
+
+[completion-long]
+hash = "sha1-a595834860ba248c408c348d3b87fecda069bcf5"
+other = "为 {{.CommandName}} 命令生成指定 shell 的自动补全脚本。\n查看每个子命令的帮助，以了解如何使用生成的脚本。\n"
+
+[completion-short]
+hash = "sha1-7263214c9964af7ad934cd4deea1ec8050d02992"
+other = "为指定的 shell 生成自动补全脚本"
+
+[help-for]
+hash = "sha1-62f26131803a44c2e6614a1e6e099e288eab447f"
+other = "{{.CommandName}} 命令的帮助信息"
+
+[help-long]
+hash = "sha1-384a34cf179741f7e66eaa53d262da8c56b4f150"
+other = "Help 命令用于获取应用程序中任意命令的帮助信息.\n输入 {{.CommandName}} help [命令路径] 查看详情。"
+
+[help-short]
+hash = "sha1-c5a05ae5bcca6109d7c5afaa94af85bd466ee912"
+other = "获取任意命令的帮助信息"
+
+[proxy-address]
+hash = "sha1-12a3b12e19e47f45667acb99ead405653b13ad6e"
+other = "代理地址"
+
+[script-address]
+hash = "sha1-cdb1fd29eefc487c9de3c262e0d6d9413d812c0a"
+other = "脚本地址"
+
+[this-command]
+hash = "sha1-6245d94e21666bd1f67d3b124a98c06f6ebca2f1"
+other = "此命令"
+
+[use-proxy]
+hash = "sha1-01c42902b0b7003f49d4ceb964ad51ede9a4cc08"
+other = "使用代理服务器"
+
+[use-script]
+hash = "sha1-414a221f4f5fb7b8d804f746773c4fa22ea6751b"
+other = "使用设置脚本"

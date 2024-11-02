@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"strings"
+
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/fhluo/winproxy"
-	"github.com/fhluo/winproxy/cmd/i18n"
 	"github.com/samber/lo"
-	"strings"
 )
 
 type Settings struct {
@@ -20,13 +21,13 @@ type Settings struct {
 }
 
 func (s Settings) BaseInfoRows() [][]string {
-	p := i18n.GetPrinter()
+	//p := i18n.GetPrinter()
 	return [][]string{
-		{p.Sprintf("Use proxy"), s.Proxy},
-		{p.Sprintf("Proxy address"), s.ProxyAddress},
-		{p.Sprintf("Use script"), s.Script},
-		{p.Sprintf("Script address"), s.ScriptAddress},
-		{p.Sprintf("Auto-detect"), s.AutoDetect},
+		{Localize(&i18n.Message{ID: "Use proxy", Other: "Use proxy"}), s.Proxy},
+		{Localize(&i18n.Message{ID: "Proxy address", Other: "Proxy address"}), s.ProxyAddress},
+		{Localize(&i18n.Message{ID: "Use script", Other: "Use script"}), s.Script},
+		{Localize(&i18n.Message{ID: "Script address", Other: "Script address"}), s.ScriptAddress},
+		{Localize(&i18n.Message{ID: "Auto-detect", Other: "Auto-detect"}), s.AutoDetect},
 	}
 }
 
@@ -52,8 +53,8 @@ func (s Settings) BaseInfoTable() *table.Table {
 }
 
 func (s Settings) BypassListTable() *table.Table {
-	p := i18n.GetPrinter()
-	headers := []string{p.Sprintf("Bypass list")}
+	//p := i18n.GetPrinter()
+	headers := []string{Localize(&i18n.Message{ID: "Bypass list", Other: "Bypass list"})}
 	rows := lo.Map(s.BypassList, func(item string, _ int) []string {
 		return []string{item}
 	})
