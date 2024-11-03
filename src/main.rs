@@ -1,4 +1,5 @@
 use clap::{arg, Parser};
+use colored::Colorize;
 use winproxy::{DefaultConnectionSettings, Flags};
 
 #[derive(Parser, Debug)]
@@ -85,5 +86,43 @@ fn main() {
 }
 
 fn show_settings(settings: &DefaultConnectionSettings) {
-    println!("{:#?}", settings);
+    println!(
+        "{} {}",
+        "Use Proxy:".green(),
+        format!("{}", settings.flags.contains(Flags::Proxy)).bright_purple()
+    );
+    println!(
+        "{} {}",
+        "Proxy Address:".green(),
+        settings.proxy_address.bright_blue()
+    );
+    println!(
+        "{} {}",
+        "Use Script:".green(),
+        format!("{}", settings.flags.contains(Flags::AutoProxyURL)).bright_purple()
+    );
+    println!(
+        "{} {}",
+        "Script Address:".green(),
+        settings.script_address.bright_blue()
+    );
+    println!(
+        "{} {}",
+        "Auto-detect:".green(),
+        format!("{}", settings.flags.contains(Flags::AutoDetect)).bright_purple()
+    );
+    println!(
+        "{} {}\n{}\n{}", "Bypass List:".green(),
+        "[".bright_black(),
+        {
+            settings
+                .bypass_list
+                .iter()
+                .map(|address| format!("  {}", address.bright_blue()))
+                .collect::<Vec<_>>()
+                .join(",\n")
+                .bright_black()
+        },
+        "]".bright_black()
+    );
 }
