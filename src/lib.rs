@@ -1,5 +1,7 @@
 use bitflags::bitflags;
 use std::error::Error;
+use std::fmt;
+use std::fmt::{Debug, Formatter};
 use std::io::{Cursor, Read, Write};
 use windows_registry::{Value, CURRENT_USER};
 
@@ -13,7 +15,6 @@ bitflags! {
     }
 }
 
-#[derive(Debug)]
 pub struct DefaultConnectionSettings {
     unknown: u32,
     pub version: u32,
@@ -35,6 +36,18 @@ impl Default for DefaultConnectionSettings {
             script_address: Default::default(),
             unknown1: [0u8; 32],
         }
+    }
+}
+
+impl Debug for DefaultConnectionSettings {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DefaultConnectionSettings")
+            .field("version", &self.version)
+            .field("flags", &self.flags)
+            .field("proxy_address", &self.proxy_address)
+            .field("bypass_list", &self.bypass_list)
+            .field("script_address", &self.script_address)
+            .finish()
     }
 }
 
@@ -89,7 +102,8 @@ impl TryFrom<&[u8]> for DefaultConnectionSettings {
             flags: Flags::from_bits(cursor.read_u32()?).ok_or("")?,
             proxy_address: cursor.read_string()?,
             bypass_list: {
-                cursor.read_string()?
+                cursor
+                    .read_string()?
                     .split(';')
                     .map(|s| s.trim().to_string())
                     .collect()
