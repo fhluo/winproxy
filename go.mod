@@ -9,13 +9,13 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cobra v1.8.1
-	golang.org/x/sys v0.26.0
-	golang.org/x/text v0.19.0
+	golang.org/x/sys v0.27.0
+	golang.org/x/text v0.20.0
 )
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
-	github.com/charmbracelet/x/ansi v0.4.2 // indirect
+	github.com/charmbracelet/x/ansi v0.4.5 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
