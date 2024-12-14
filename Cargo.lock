@@ -354,4 +354,5 @@ dependencies = [
  "clap",
  "colored",
  "windows-registry",
+ "windows-result",
 ]
