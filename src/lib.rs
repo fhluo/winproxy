@@ -141,7 +141,7 @@ impl TryFrom<&[u8]> for DefaultConnectionSettings {
     fn try_from(value: &[u8]) -> Result<Self> {
         let mut cursor = Cursor::new(value);
 
-        Ok(Self {
+        let settings = Self {
             unknown: cursor.read_u32()?,
             version: cursor.read_u32()?,
             flags: Flags::from_bits_retain(cursor.read_u32()?),
@@ -159,7 +159,9 @@ impl TryFrom<&[u8]> for DefaultConnectionSettings {
                 cursor.read_exact(&mut buffer)?;
                 buffer
             },
-        })
+        };
+
+        Ok(settings)
     }
 }
 
@@ -173,17 +175,15 @@ impl TryFrom<DefaultConnectionSettings> for Vec<u8> {
         cursor.write_u32(settings.version)?;
         cursor.write_u32(settings.flags.bits())?;
         cursor.write_string(&settings.proxy_address)?;
-
-        let bypass_list = settings
-            .bypass_list
-            .iter()
-            .map(|s| s.trim())
-            .collect::<Vec<_>>()
-            .join(";");
-
-        cursor.write_string(&bypass_list)?;
+        cursor.write_string({
+            &settings
+                .bypass_list
+                .iter()
+                .map(|s| s.trim())
+                .collect::<Vec<_>>()
+                .join(";")
+        })?;
         cursor.write_string(&settings.script_address)?;
-
         cursor.write_all(&settings.unknown1)?;
 
         Ok(cursor.into_inner())
@@ -216,6 +216,9 @@ impl DefaultConnectionSettings {
     }
 
     pub fn write_registry(self) -> Result<()> {
-        Self::set_registry_value(&Value::from(&TryInto::<Vec<u8>>::try_into(self)? as &[u8]))
+        Self::set_registry_value({
+            let settings: Vec<u8> = self.try_into()?;
+            &Value::from(settings.as_slice())
+        })
     }
 }
