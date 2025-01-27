@@ -1,4 +1,5 @@
 use bitflags::bitflags;
+use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use std::fmt::{Debug, Display, Formatter};
 use std::io::{Cursor, Read, Write};
 use std::string::FromUtf8Error;
@@ -51,6 +52,23 @@ impl Debug for DefaultConnectionSettings {
     }
 }
 
+impl DefaultConnectionSettings {
+    fn parse_bypass_list(bypass_list: &str) -> Vec<String> {
+        bypass_list
+            .split(';')
+            .map(|s| s.trim().to_string())
+            .collect()
+    }
+
+    pub fn bypass_list_string(&self) -> String {
+        self.bypass_list
+            .iter()
+            .map(|s| s.trim())
+            .collect::<Vec<_>>()
+            .join(";")
+    }
+}
+
 #[derive(Debug)]
 pub enum Error {
     IOError(io::Error),
@@ -98,41 +116,18 @@ impl From<windows_result::Error> for Error {
 
 pub type Result<T> = result::Result<T, Error>;
 
-trait Reader {
-    fn read_u32(&mut self) -> Result<u32>;
-    fn read_string(&mut self) -> Result<String>;
+fn read_string(mut r: impl Read) -> Result<String> {
+    let len = r.read_u32::<LittleEndian>()? as usize;
+
+    let mut buffer = vec![0u8; len];
+    r.read_exact(&mut buffer)?;
+
+    String::from_utf8(buffer).map_err(Into::into)
 }
 
-trait Writer {
-    fn write_u32(&mut self, value: u32) -> Result<()>;
-    fn write_string(&mut self, value: &str) -> Result<()>;
-}
-
-impl Reader for Cursor<&[u8]> {
-    fn read_u32(&mut self) -> Result<u32> {
-        let mut buffer = [0u8; 4];
-        self.read_exact(&mut buffer)?;
-
-        Ok(u32::from_le_bytes(buffer))
-    }
-
-    fn read_string(&mut self) -> Result<String> {
-        let mut buffer = vec![0u8; self.read_u32()? as usize];
-        self.read_exact(&mut buffer)?;
-
-        Ok(String::from_utf8(buffer)?)
-    }
-}
-
-impl Writer for Cursor<Vec<u8>> {
-    fn write_u32(&mut self, value: u32) -> Result<()> {
-        self.write_all(&value.to_le_bytes()).map_err(Into::into)
-    }
-
-    fn write_string(&mut self, value: &str) -> Result<()> {
-        self.write_u32(value.len() as u32)?;
-        self.write_all(value.as_bytes()).map_err(Into::into)
-    }
+fn write_string(mut w: impl Write, s: &str) -> Result<()> {
+    w.write_u32::<LittleEndian>(s.len() as u32)?;
+    w.write_all(s.as_bytes()).map_err(Into::into)
 }
 
 impl TryFrom<&[u8]> for DefaultConnectionSettings {
@@ -142,18 +137,12 @@ impl TryFrom<&[u8]> for DefaultConnectionSettings {
         let mut cursor = Cursor::new(value);
 
         let settings = Self {
-            unknown: cursor.read_u32()?,
-            version: cursor.read_u32()?,
-            flags: Flags::from_bits_retain(cursor.read_u32()?),
-            proxy_address: cursor.read_string()?,
-            bypass_list: {
-                cursor
-                    .read_string()?
-                    .split(';')
-                    .map(|s| s.trim().to_string())
-                    .collect()
-            },
-            script_address: cursor.read_string()?,
+            unknown: cursor.read_u32::<LittleEndian>()?,
+            version: cursor.read_u32::<LittleEndian>()?,
+            flags: Flags::from_bits_retain(cursor.read_u32::<LittleEndian>()?),
+            proxy_address: read_string(&mut cursor)?,
+            bypass_list: Self::parse_bypass_list(&read_string(&mut cursor)?),
+            script_address: read_string(&mut cursor)?,
             unknown1: {
                 let mut buffer = [0u8; 32];
                 cursor.read_exact(&mut buffer)?;
@@ -171,19 +160,12 @@ impl TryFrom<DefaultConnectionSettings> for Vec<u8> {
     fn try_from(settings: DefaultConnectionSettings) -> Result<Self> {
         let mut cursor = Cursor::new(Vec::<u8>::new());
 
-        cursor.write_u32(settings.unknown)?;
-        cursor.write_u32(settings.version)?;
-        cursor.write_u32(settings.flags.bits())?;
-        cursor.write_string(&settings.proxy_address)?;
-        cursor.write_string({
-            &settings
-                .bypass_list
-                .iter()
-                .map(|s| s.trim())
-                .collect::<Vec<_>>()
-                .join(";")
-        })?;
-        cursor.write_string(&settings.script_address)?;
+        cursor.write_u32::<LittleEndian>(settings.unknown)?;
+        cursor.write_u32::<LittleEndian>(settings.version)?;
+        cursor.write_u32::<LittleEndian>(settings.flags.bits())?;
+        write_string(&mut cursor, &settings.proxy_address)?;
+        write_string(&mut cursor, &settings.bypass_list_string())?;
+        write_string(&mut cursor, &settings.script_address)?;
         cursor.write_all(&settings.unknown1)?;
 
         Ok(cursor.into_inner())
