@@ -5,9 +5,9 @@ go 1.23
 require (
 	github.com/charmbracelet/lipgloss v1.0.0
 	github.com/fatih/color v1.18.0
-	github.com/nicksnyder/go-i18n/v2 v2.4.1
+	github.com/nicksnyder/go-i18n/v2 v2.5.0
 	github.com/pelletier/go-toml/v2 v2.2.3
-	github.com/samber/lo v1.47.0
+	github.com/samber/lo v1.49.0
 	github.com/spf13/cobra v1.8.1
 	golang.org/x/sys v0.29.0
 	golang.org/x/text v0.21.0
@@ -15,7 +15,7 @@ require (
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
-	github.com/charmbracelet/x/ansi v0.6.0 // indirect
+	github.com/charmbracelet/x/ansi v0.7.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
