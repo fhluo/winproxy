@@ -7,7 +7,7 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
-	"github.com/fhluo/winproxy"
+	"github.com/fhluo/winproxy/go"
 	"github.com/samber/lo"
 )
 

@@ -1,7 +1,7 @@
 package winproxy
 
 import (
-	"github.com/fhluo/winproxy/settings"
+	"github.com/fhluo/winproxy/go/settings"
 	"strings"
 )
 

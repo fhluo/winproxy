@@ -1,4 +1,4 @@
-module github.com/fhluo/winproxy
+module github.com/fhluo/winproxy/go
 
 go 1.24.1
 

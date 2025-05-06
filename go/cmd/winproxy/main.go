@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fhluo/winproxy/cmd"
+	"github.com/fhluo/winproxy/go/cmd"
 	"log"
 )
 

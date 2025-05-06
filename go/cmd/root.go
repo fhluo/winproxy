@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"github.com/fhluo/winproxy"
+	"github.com/fhluo/winproxy/go"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"

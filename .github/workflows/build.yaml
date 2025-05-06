@@ -28,13 +28,13 @@ jobs:
         uses: arduino/setup-task@v2
 
       - name: Build
-        run: task build
+        run: task go:build
 
       - name: Test
-        run: task test
+        run: task go:test
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: winproxy.exe
+          files: go/winproxy.exe
