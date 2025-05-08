@@ -1,23 +1,16 @@
-name: Build
+name: Release
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags: [ "v*.*.*" ]
 
 jobs:
   build:
     runs-on: windows-2025
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
-          cache-dependency-path: |
-            go/go.sum
 
       - name: Set up Rust
         run: |
@@ -30,10 +23,11 @@ jobs:
           "$env:LOCALAPPDATA\Microsoft\WinGet\Links" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 
       - name: Build
-        run: | 
-          task go:build
+        run: |
           task build
 
-      - name: Test
-        run: |
-          task go:test
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            target/release/winproxy.exe

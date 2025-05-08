@@ -1,6 +1,14 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: 3
 
 includes:
   go:
     dir: go
     taskfile: go/Taskfile.yaml
+
+tasks:
+  run:
+    cmd: cargo run
+
+  build:
+    cmd: cargo build --release
