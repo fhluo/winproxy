@@ -165,11 +165,21 @@ impl DefaultConnectionSettings {
         Ok(())
     }
 
+    pub fn from_bytes(data: &[u8]) -> Result<DefaultConnectionSettings> {
+        DefaultConnectionSettings::try_from(data)
+    }
+
     pub fn from_registry() -> Result<Self> {
-        Ok(Self::get_registry_value()?.as_ref().try_into()?)
+        Ok(DefaultConnectionSettings::from_bytes(
+            Self::get_registry_value()?.as_ref(),
+        )?)
+    }
+
+    pub fn try_into_bytes(self) -> Result<Vec<u8>> {
+        Vec::try_from(self)
     }
 
     pub fn write_registry(self) -> Result<()> {
-        Self::set_registry_value(&Value::from(Vec::try_from(self)?.as_slice()))
+        Self::set_registry_value(&Value::from(self.try_into_bytes()?.as_slice()))
     }
 }
