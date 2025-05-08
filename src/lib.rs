@@ -1,9 +1,10 @@
 use bitflags::bitflags;
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::{Debug, Formatter};
 use std::io::{Cursor, Read, Write};
 use std::string::FromUtf8Error;
-use std::{error, fmt, io, result};
+use std::{fmt, io, result};
+use thiserror::Error;
 use windows_registry::{Value, CURRENT_USER};
 
 bitflags! {
@@ -69,49 +70,14 @@ impl DefaultConnectionSettings {
     }
 }
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum Error {
-    IOError(io::Error),
-    FromUtf8Error(FromUtf8Error),
-    WindowsResultError(windows_result::Error),
-}
-
-impl Display for Error {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        match self {
-            Error::IOError(err) => Display::fmt(err, f),
-            Error::FromUtf8Error(err) => Display::fmt(err, f),
-            Error::WindowsResultError(err) => Display::fmt(err, f),
-        }
-    }
-}
-
-impl error::Error for Error {
-    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
-        match self {
-            Error::IOError(err) => Some(err),
-            Error::FromUtf8Error(err) => Some(err),
-            Error::WindowsResultError(err) => Some(err),
-        }
-    }
-}
-
-impl From<io::Error> for Error {
-    fn from(err: io::Error) -> Self {
-        Self::IOError(err)
-    }
-}
-
-impl From<FromUtf8Error> for Error {
-    fn from(err: FromUtf8Error) -> Self {
-        Self::FromUtf8Error(err)
-    }
-}
-
-impl From<windows_result::Error> for Error {
-    fn from(err: windows_result::Error) -> Self {
-        Self::WindowsResultError(err)
-    }
+    #[error("IO error: {0}")]
+    IO(#[from] io::Error),
+    #[error("UTF-8 conversion error: {0}")]
+    UTF8(#[from] FromUtf8Error),
+    #[error("Windows registry error: {0}")]
+    Registry(#[from] windows_result::Error),
 }
 
 pub type Result<T> = result::Result<T, Error>;
@@ -122,12 +88,16 @@ fn read_string(mut r: impl Read) -> Result<String> {
     let mut buffer = vec![0u8; len];
     r.read_exact(&mut buffer)?;
 
-    String::from_utf8(buffer).map_err(Into::into)
+    let s = String::from_utf8(buffer)?;
+
+    Ok(s)
 }
 
 fn write_string(mut w: impl Write, s: &str) -> Result<()> {
     w.write_u32::<LittleEndian>(s.len() as u32)?;
-    w.write_all(s.as_bytes()).map_err(Into::into)
+    w.write_all(s.as_bytes())?;
+
+    Ok(())
 }
 
 impl TryFrom<&[u8]> for DefaultConnectionSettings {
@@ -179,18 +149,20 @@ impl DefaultConnectionSettings {
 
     #[inline]
     fn get_registry_value() -> Result<Value> {
-        CURRENT_USER
+        let v = CURRENT_USER
             .open(Self::KEY_PATH)?
-            .get_value(Self::VALUE_NAME)
-            .map_err(Into::into)
+            .get_value(Self::VALUE_NAME)?;
+
+        Ok(v)
     }
 
     #[inline]
     fn set_registry_value(value: &Value) -> Result<()> {
         CURRENT_USER
             .open(Self::KEY_PATH)?
-            .set_value(Self::VALUE_NAME, value)
-            .map_err(Into::into)
+            .set_value(Self::VALUE_NAME, value)?;
+
+        Ok(())
     }
 
     pub fn from_registry() -> Result<Self> {
