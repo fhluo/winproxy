@@ -170,9 +170,6 @@ impl DefaultConnectionSettings {
     }
 
     pub fn write_registry(self) -> Result<()> {
-        Self::set_registry_value({
-            let settings: Vec<u8> = self.try_into()?;
-            &Value::from(settings.as_slice())
-        })
+        Self::set_registry_value(&Value::from(Vec::try_from(self)?.as_slice()))
     }
 }
