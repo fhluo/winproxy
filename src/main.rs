@@ -1,5 +1,7 @@
-use clap::{arg, Parser};
-use colored::Colorize;
+use clap::{Parser, arg};
+use comfy_table::modifiers::UTF8_ROUND_CORNERS;
+use comfy_table::presets::UTF8_FULL;
+use comfy_table::{Cell, Color, ContentArrangement, Table};
 use winproxy::{DefaultConnectionSettings, Flags};
 
 #[derive(Parser, Debug)]
@@ -31,14 +33,17 @@ struct Args {
 
 impl Args {
     fn all_none(&self) -> bool {
-        matches!(self, Args {
-            use_proxy: None,
-            use_script: None,
-            auto_detect: None,
-            proxy_address: None,
-            script_address: None,
-            bypass_list: None
-        })
+        matches!(
+            self,
+            Args {
+                use_proxy: None,
+                use_script: None,
+                auto_detect: None,
+                proxy_address: None,
+                script_address: None,
+                bypass_list: None
+            }
+        )
     }
 
     fn write_settings(self, settings: &mut DefaultConnectionSettings) {
@@ -86,43 +91,36 @@ fn main() {
 }
 
 fn show_settings(settings: &DefaultConnectionSettings) {
-    println!(
-        "{} {}",
-        "Use Proxy:".green(),
-        format!("{}", settings.flags.contains(Flags::Proxy)).bright_purple()
-    );
-    println!(
-        "{} {}",
-        "Proxy Address:".green(),
-        settings.proxy_address.bright_blue()
-    );
-    println!(
-        "{} {}",
-        "Use Script:".green(),
-        format!("{}", settings.flags.contains(Flags::AutoProxyURL)).bright_purple()
-    );
-    println!(
-        "{} {}",
-        "Script Address:".green(),
-        settings.script_address.bright_blue()
-    );
-    println!(
-        "{} {}",
-        "Auto-detect:".green(),
-        format!("{}", settings.flags.contains(Flags::AutoDetect)).bright_purple()
-    );
-    println!(
-        "{} {}\n{}\n{}", "Bypass List:".green(),
-        "[".bright_black(),
-        {
-            settings
-                .bypass_list
-                .iter()
-                .map(|address| format!("  {}", address.bright_blue()))
-                .collect::<Vec<_>>()
-                .join(",\n")
-                .bright_black()
-        },
-        "]".bright_black()
-    );
+    let mut table = Table::new();
+
+    table
+        .load_preset(UTF8_FULL)
+        .apply_modifier(UTF8_ROUND_CORNERS)
+        .set_content_arrangement(ContentArrangement::Dynamic)
+        .add_row(vec![
+            Cell::new("Use Proxy").fg(Color::Green),
+            Cell::new(settings.flags.contains(Flags::Proxy)).fg(Color::Magenta),
+        ])
+        .add_row(vec![
+            Cell::new("Proxy Address").fg(Color::Green),
+            Cell::new(&settings.proxy_address).fg(Color::Blue),
+        ])
+        .add_row(vec![
+            Cell::new("Use Script").fg(Color::Green),
+            Cell::new(settings.flags.contains(Flags::AutoProxyURL)).fg(Color::Magenta),
+        ])
+        .add_row(vec![
+            Cell::new("Script Address").fg(Color::Green),
+            Cell::new(&settings.script_address).fg(Color::Blue),
+        ])
+        .add_row(vec![
+            Cell::new("Auto-detect").fg(Color::Green),
+            Cell::new(settings.flags.contains(Flags::AutoDetect)).fg(Color::Magenta),
+        ])
+        .add_row(vec![
+            Cell::new("Bypass List").fg(Color::Green),
+            Cell::new(settings.bypass_list.join("\n")).fg(Color::Blue),
+        ]);
+
+    println!("{table}");
 }
