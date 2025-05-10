@@ -2,6 +2,12 @@
 name = "winproxy"
 version = "0.4.0"
 edition = "2024"
+description = "Change Windows system proxy settings"
+categories = ["command-line-utilities"]
+keywords = ["windows", "proxy"]
+repository = "https://github.com/fhluo/winproxy"
+license = "MIT"
+include = ["src/*.rs"]
 
 [dependencies]
 windows-registry = "0.5"
