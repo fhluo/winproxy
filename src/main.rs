@@ -1,7 +1,7 @@
 use clap::{Parser, arg};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::{Cell, Color, ContentArrangement, Table};
+use comfy_table::presets::UTF8_FULL_CONDENSED;
+use comfy_table::{Cell, CellAlignment, Color, ContentArrangement, Table};
 use winproxy::{DefaultConnectionSettings, Flags};
 
 #[derive(Parser, Debug)]
@@ -80,7 +80,7 @@ fn main() {
         .expect("failed to read default connection settings from registry");
 
     if args.all_none() {
-        show_settings(&settings);
+        print_settings_table(&settings);
     } else {
         args.write_settings(&mut settings);
         settings.version += 1;
@@ -90,36 +90,53 @@ fn main() {
     }
 }
 
-fn show_settings(settings: &DefaultConnectionSettings) {
+fn symbol_cell(b: bool) -> Cell {
+    if b {
+        Cell::new("[x]").fg(Color::White)
+    } else {
+        Cell::new("[ ]").fg(Color::DarkGrey)
+    }
+    .set_alignment(CellAlignment::Center)
+}
+
+fn title_cell(title: &str) -> Cell {
+    Cell::new(title).fg(Color::Green)
+}
+
+fn print_settings_table(settings: &DefaultConnectionSettings) {
     let mut table = Table::new();
 
     table
-        .load_preset(UTF8_FULL)
+        .load_preset(UTF8_FULL_CONDENSED)
         .apply_modifier(UTF8_ROUND_CORNERS)
         .set_content_arrangement(ContentArrangement::Dynamic)
         .add_row(vec![
-            Cell::new("Use Proxy").fg(Color::Green),
-            Cell::new(settings.flags.contains(Flags::Proxy)).fg(Color::Magenta),
+            title_cell("Proxy"),
+            symbol_cell(settings.is_proxy_enabled()),
         ])
         .add_row(vec![
-            Cell::new("Proxy Address").fg(Color::Green),
-            Cell::new(&settings.proxy_address).fg(Color::Blue),
+            title_cell("Script"),
+            symbol_cell(settings.is_script_enabled()),
         ])
         .add_row(vec![
-            Cell::new("Use Script").fg(Color::Green),
-            Cell::new(settings.flags.contains(Flags::AutoProxyURL)).fg(Color::Magenta),
+            title_cell("Auto-detect"),
+            symbol_cell(settings.is_auto_detect_enabled()),
         ])
         .add_row(vec![
-            Cell::new("Script Address").fg(Color::Green),
-            Cell::new(&settings.script_address).fg(Color::Blue),
+            title_cell("Proxy Address"),
+            Cell::new(&settings.proxy_address)
+                .fg(Color::Blue)
+                .set_alignment(CellAlignment::Center),
         ])
         .add_row(vec![
-            Cell::new("Auto-detect").fg(Color::Green),
-            Cell::new(settings.flags.contains(Flags::AutoDetect)).fg(Color::Magenta),
+            title_cell("Script Address"),
+            Cell::new(&settings.script_address)
+                .fg(Color::Blue)
+                .set_alignment(CellAlignment::Center),
         ])
         .add_row(vec![
-            Cell::new("Bypass List").fg(Color::Green),
-            Cell::new(settings.bypass_list.join("\n")).fg(Color::Blue),
+            title_cell("Bypass List"),
+            Cell::new(settings.bypass_list.join("\n")).set_alignment(CellAlignment::Center),
         ]);
 
     println!("{table}");
