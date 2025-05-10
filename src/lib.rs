@@ -5,7 +5,7 @@ use std::io::{Cursor, Read, Write};
 use std::string::FromUtf8Error;
 use std::{fmt, io, result};
 use thiserror::Error;
-use windows_registry::{Value, CURRENT_USER};
+use windows_registry::{CURRENT_USER, Value};
 
 bitflags! {
     #[derive(Debug)]
@@ -54,6 +54,36 @@ impl Debug for DefaultConnectionSettings {
 }
 
 impl DefaultConnectionSettings {
+    #[inline]
+    pub fn is_proxy_enabled(&self) -> bool {
+        self.flags.contains(Flags::Proxy)
+    }
+
+    #[inline]
+    pub fn set_proxy_enabled(&mut self, enabled: bool) {
+        self.flags.set(Flags::Proxy, enabled);
+    }
+
+    #[inline]
+    pub fn is_script_enabled(&self) -> bool {
+        self.flags.contains(Flags::AutoProxyURL)
+    }
+
+    #[inline]
+    pub fn set_script_enabled(&mut self, enabled: bool) {
+        self.flags.set(Flags::AutoProxyURL, enabled);
+    }
+
+    #[inline]
+    pub fn is_auto_detect_enabled(&self) -> bool {
+        self.flags.contains(Flags::AutoDetect)
+    }
+
+    #[inline]
+    pub fn set_auto_detect_enabled(&mut self, enabled: bool) {
+        self.flags.set(Flags::AutoDetect, enabled);
+    }
+
     fn parse_bypass_list(bypass_list: &str) -> Vec<String> {
         bypass_list
             .split(';')
