@@ -12,3 +12,6 @@ tasks:
 
   build:
     cmd: cargo build --release
+
+  install:
+    cmd: cargo install --path .
