@@ -96,6 +96,7 @@ impl DefaultConnectionSettings {
         bypass_list
             .split(';')
             .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
             .collect()
     }
 
@@ -104,6 +105,7 @@ impl DefaultConnectionSettings {
         self.bypass_list
             .iter()
             .map(|s| s.trim())
+            .filter(|s| !s.is_empty())
             .collect::<Vec<_>>()
             .join(";")
     }
