@@ -5,7 +5,7 @@ use std::io::{Cursor, Read, Write};
 use std::string::FromUtf8Error;
 use std::{fmt, io, result};
 use thiserror::Error;
-use windows_registry::{CURRENT_USER, Value};
+use windows_registry::{Value, CURRENT_USER};
 
 bitflags! {
     #[derive(Debug)]
@@ -49,6 +49,7 @@ impl Debug for DefaultConnectionSettings {
             .field("proxy_address", &self.proxy_address)
             .field("bypass_list", &self.bypass_list)
             .field("script_address", &self.script_address)
+            // Omit unknown fields from debug output
             .finish()
     }
 }
@@ -203,14 +204,12 @@ impl DefaultConnectionSettings {
         Ok(())
     }
 
-    pub fn from_bytes(data: &[u8]) -> Result<DefaultConnectionSettings> {
-        DefaultConnectionSettings::try_from(data)
+    pub fn from_bytes(data: &[u8]) -> Result<Self> {
+        Self::try_from(data)
     }
 
     pub fn from_registry() -> Result<Self> {
-        Ok(DefaultConnectionSettings::from_bytes(
-            Self::get_registry_value()?.as_ref(),
-        )?)
+        Ok(Self::from_bytes(Self::get_registry_value()?.as_ref())?)
     }
 
     pub fn try_into_bytes(self) -> Result<Vec<u8>> {
