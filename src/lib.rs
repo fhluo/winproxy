@@ -54,36 +54,43 @@ impl Debug for DefaultConnectionSettings {
 }
 
 impl DefaultConnectionSettings {
+    /// Checks if proxy is enabled
     #[inline]
     pub fn is_proxy_enabled(&self) -> bool {
         self.flags.contains(Flags::Proxy)
     }
 
+    /// Enables or disables proxy
     #[inline]
     pub fn set_proxy_enabled(&mut self, enabled: bool) {
         self.flags.set(Flags::Proxy, enabled);
     }
 
+    /// Checks if automatic proxy script is enabled
     #[inline]
     pub fn is_script_enabled(&self) -> bool {
         self.flags.contains(Flags::AutoProxyURL)
     }
 
+    /// Enables or disables automatic proxy script
     #[inline]
     pub fn set_script_enabled(&mut self, enabled: bool) {
         self.flags.set(Flags::AutoProxyURL, enabled);
     }
 
+    /// Checks if automatic proxy detection is enabled
     #[inline]
     pub fn is_auto_detect_enabled(&self) -> bool {
         self.flags.contains(Flags::AutoDetect)
     }
 
+    /// Enables or disables automatic proxy detection
     #[inline]
     pub fn set_auto_detect_enabled(&mut self, enabled: bool) {
         self.flags.set(Flags::AutoDetect, enabled);
     }
 
+    /// Parses semicolon-separated bypass list into vector
     fn parse_bypass_list(bypass_list: &str) -> Vec<String> {
         bypass_list
             .split(';')
@@ -91,6 +98,7 @@ impl DefaultConnectionSettings {
             .collect()
     }
 
+    /// Converts bypass list vector to semicolon-separated string
     pub fn bypass_list_string(&self) -> String {
         self.bypass_list
             .iter()
