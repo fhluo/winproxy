@@ -31,3 +31,37 @@ cargo install winproxy
 ```shell
 go install github.com/fhluo/winproxy/go/cmd/winproxy@latest
 ```
+
+### Download Pre-built Binaries
+
+Visit the [Releases](https://github.com/fhluo/winproxy/releases) page to download pre-built binaries.
+
+## Usage
+
+### View Current Proxy Settings
+
+```shell
+winproxy
+```
+
+This will display your current proxy configuration in a formatted table.
+
+### Enable/Disable Proxy
+
+```shell
+# Enable proxy
+winproxy -p true
+
+# Disable proxy
+winproxy -p false
+```
+
+### Set Proxy Server
+
+```shell
+# Set HTTP proxy
+winproxy -p true --proxy-address "127.0.0.1:8080"
+
+# Set proxy with bypass list
+winproxy -p true --proxy-address "127.0.0.1:8080" --bypass-list "localhost,127.*,<local>"
+```
