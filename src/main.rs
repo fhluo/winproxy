@@ -7,15 +7,15 @@ use winproxy::{DefaultConnectionSettings, Flags};
 #[derive(Parser, Debug, Default, PartialEq)]
 struct Args {
     /// Use a proxy server
-    #[arg(short = 'p', long, value_name = "BOOLEAN")]
+    #[arg(short = 'p', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true")]
     use_proxy: Option<bool>,
 
     /// Use setup script
-    #[arg(short = 's', long, value_name = "BOOLEAN")]
+    #[arg(short = 's', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true")]
     use_script: Option<bool>,
 
     /// Automatically detect settings
-    #[arg(short = 'a', long, value_name = "BOOLEAN")]
+    #[arg(short = 'a', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true")]
     auto_detect: Option<bool>,
 
     /// Proxy address
