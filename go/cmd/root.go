@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"slices"
 	"strings"
 	"text/template"
 
 	"github.com/fatih/color"
-	"github.com/fhluo/winproxy/go"
+	winproxy "github.com/fhluo/winproxy/go"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 )
 
@@ -57,10 +57,13 @@ func init() {
 
 func localizeHelpCommand() {
 	rootCmd.InitDefaultHelpCmd()
-	helpCmd, ok := lo.Find(rootCmd.Commands(), func(cmd *cobra.Command) bool {
+
+	i := slices.IndexFunc(rootCmd.Commands(), func(cmd *cobra.Command) bool {
 		return cmd.Name() == "help"
 	})
-	if ok {
+
+	if i != -1 {
+		helpCmd := rootCmd.Commands()[i]
 		helpCmd.Short = Localize(&i18n.Message{ID: "help-short", Other: "Help about any command"})
 		helpCmd.Long = LocalizeConfig(&i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{ID: "help-long", Other: `Help provides help for any command in the application.
@@ -74,10 +77,13 @@ Simply type {{.CommandName}} help [path to command] for full details.`},
 
 func localizeCompletionCommand() {
 	rootCmd.InitDefaultCompletionCmd()
-	completionCmd, ok := lo.Find(rootCmd.Commands(), func(cmd *cobra.Command) bool {
+
+	i := slices.IndexFunc(rootCmd.Commands(), func(cmd *cobra.Command) bool {
 		return cmd.Name() == "completion"
 	})
-	if ok {
+
+	if i != -1 {
+		completionCmd := rootCmd.Commands()[i]
 		completionCmd.Short = Localize(&i18n.Message{ID: "completion-short", Other: "Generate the autocompletion script for the specified shell"})
 		completionCmd.Long = LocalizeConfig(&i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{

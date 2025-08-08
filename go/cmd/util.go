@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/fhluo/winproxy/go"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
-	"github.com/samber/lo"
 )
 
 type Settings struct {
@@ -53,9 +53,6 @@ func (s Settings) BaseInfoTable() *table.Table {
 
 func (s Settings) BypassListTable() *table.Table {
 	headers := []string{Localize(&i18n.Message{ID: "Bypass list", Other: "Bypass list"})}
-	rows := lo.Map(s.BypassList, func(item string, _ int) []string {
-		return []string{item}
-	})
 
 	t := table.New()
 
@@ -70,7 +67,13 @@ func (s Settings) BypassListTable() *table.Table {
 		}
 	})
 
-	return t.Headers(headers...).Rows(rows...)
+	return t.Headers(headers...).Rows(slices.Collect(func(yield func([]string) bool) {
+		for _, item := range s.BypassList {
+			if !yield([]string{item}) {
+				return
+			}
+		}
+	})...)
 }
 
 func (s Settings) String() string {
