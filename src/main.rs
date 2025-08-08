@@ -1,4 +1,4 @@
-use clap::{Parser, arg};
+use clap::{arg, Parser};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL_CONDENSED;
 use comfy_table::{Cell, CellAlignment, Color, ContentArrangement, Table};
@@ -96,7 +96,6 @@ fn symbol_cell(b: bool) -> Cell {
     } else {
         Cell::new("[ ]").fg(Color::DarkGrey)
     }
-    .set_alignment(CellAlignment::Center)
 }
 
 fn title_cell(title: &str) -> Cell {
@@ -124,20 +123,23 @@ fn print_settings_table(settings: &DefaultConnectionSettings) {
         ])
         .add_row(vec![
             title_cell("Proxy Address"),
-            Cell::new(&settings.proxy_address)
-                .fg(Color::Blue)
-                .set_alignment(CellAlignment::Center),
+            Cell::new(&settings.proxy_address).fg(Color::Blue),
         ])
         .add_row(vec![
             title_cell("Script Address"),
-            Cell::new(&settings.script_address)
-                .fg(Color::Blue)
-                .set_alignment(CellAlignment::Center),
+            Cell::new(&settings.script_address).fg(Color::Blue),
         ])
         .add_row(vec![
             title_cell("Bypass List"),
-            Cell::new(settings.bypass_list.join("\n")).set_alignment(CellAlignment::Center),
+            Cell::new(settings.bypass_list.join("\n")),
         ]);
+
+    if let Some(col) = table.column_mut(0) {
+        col.set_cell_alignment(CellAlignment::Left);
+    }
+    if let Some(col) = table.column_mut(1) {
+        col.set_cell_alignment(CellAlignment::Center);
+    }
 
     println!("{table}");
 }
