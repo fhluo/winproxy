@@ -4,7 +4,7 @@ use comfy_table::presets::UTF8_FULL_CONDENSED;
 use comfy_table::{Cell, CellAlignment, Color, ContentArrangement, Table};
 use winproxy::{DefaultConnectionSettings, Flags};
 
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Default, PartialEq)]
 struct Args {
     /// Use a proxy server
     #[arg(short = 'p', long, value_name = "BOOLEAN")]
@@ -32,18 +32,8 @@ struct Args {
 }
 
 impl Args {
-    fn all_none(&self) -> bool {
-        matches!(
-            self,
-            Args {
-                use_proxy: None,
-                use_script: None,
-                auto_detect: None,
-                proxy_address: None,
-                script_address: None,
-                bypass_list: None
-            }
-        )
+    fn has_changes(&self) -> bool {
+        self != &Args::default()
     }
 
     fn write_settings(self, settings: &mut DefaultConnectionSettings) {
@@ -79,15 +69,16 @@ fn main() {
     let mut settings = DefaultConnectionSettings::from_registry()
         .expect("failed to read default connection settings from registry");
 
-    if args.all_none() {
-        print_settings_table(&settings);
-    } else {
+    if args.has_changes() {
         args.write_settings(&mut settings);
         settings.version += 1;
         settings
             .write_registry()
             .expect("failed to write default connection settings to registry");
+        return;
     }
+
+    print_settings_table(&settings);
 }
 
 fn symbol_cell(b: bool) -> Cell {
