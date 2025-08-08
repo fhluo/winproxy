@@ -2,9 +2,10 @@ package settings
 
 import (
 	"encoding/binary"
-	"golang.org/x/sys/windows/registry"
 	"io"
 	"unsafe"
+
+	"golang.org/x/sys/windows/registry"
 )
 
 const (

@@ -1,8 +1,9 @@
 package winproxy
 
 import (
-	"github.com/fhluo/winproxy/go/settings"
 	"strings"
+
+	"github.com/fhluo/winproxy/go/settings"
 )
 
 type Settings struct {

@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/fhluo/winproxy/go"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/samber/lo"
 )
 

@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"embed"
+	"log/slog"
+	"os"
+	"sync"
+
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/pelletier/go-toml/v2"
 	"golang.org/x/sys/windows"
 	"golang.org/x/text/language"
-	"log/slog"
-	"os"
-	"sync"
 )
 
 //go:embed locales

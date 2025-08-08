@@ -2,15 +2,16 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
+	"strings"
+	"text/template"
+
 	"github.com/fatih/color"
 	"github.com/fhluo/winproxy/go"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
-	"log/slog"
-	"os"
-	"strings"
-	"text/template"
 )
 
 var (

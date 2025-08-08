@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/fhluo/winproxy/go/cmd"
 	"log"
+
+	"github.com/fhluo/winproxy/go/cmd"
 )
 
 func init() {
