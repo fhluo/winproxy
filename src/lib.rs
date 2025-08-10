@@ -1,3 +1,8 @@
+//! Utilities to read and write the DefaultConnectionSettings registry value.
+//!
+//! - Registry path: `HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Connections`
+//! - Value name: `DefaultConnectionSettings` (binary layout)
+
 use bitflags::bitflags;
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use std::fmt::{Debug, Formatter};
@@ -55,43 +60,43 @@ impl Debug for DefaultConnectionSettings {
 }
 
 impl DefaultConnectionSettings {
-    /// Checks if proxy is enabled
+    /// Returns whether the proxy is enabled.
     #[inline]
     pub fn is_proxy_enabled(&self) -> bool {
         self.flags.contains(Flags::Proxy)
     }
 
-    /// Enables or disables proxy
+    /// Enables or disables the proxy.
     #[inline]
     pub fn set_proxy_enabled(&mut self, enabled: bool) {
         self.flags.set(Flags::Proxy, enabled);
     }
 
-    /// Checks if automatic proxy script is enabled
+    /// Returns whether the automatic proxy script is enabled.
     #[inline]
     pub fn is_script_enabled(&self) -> bool {
         self.flags.contains(Flags::AutoProxyURL)
     }
 
-    /// Enables or disables automatic proxy script
+    /// Enables or disables the automatic proxy script.
     #[inline]
     pub fn set_script_enabled(&mut self, enabled: bool) {
         self.flags.set(Flags::AutoProxyURL, enabled);
     }
 
-    /// Checks if automatic proxy detection is enabled
+    /// Returns whether automatic proxy detection is enabled.
     #[inline]
     pub fn is_auto_detect_enabled(&self) -> bool {
         self.flags.contains(Flags::AutoDetect)
     }
 
-    /// Enables or disables automatic proxy detection
+    /// Enables or disables automatic proxy detection.
     #[inline]
     pub fn set_auto_detect_enabled(&mut self, enabled: bool) {
         self.flags.set(Flags::AutoDetect, enabled);
     }
 
-    /// Parses semicolon-separated bypass list into vector
+    /// Parses a semicolon-separated bypass list into a vector of strings.
     fn parse_bypass_list(bypass_list: &str) -> Vec<String> {
         bypass_list
             .split(';')
@@ -100,7 +105,7 @@ impl DefaultConnectionSettings {
             .collect()
     }
 
-    /// Converts bypass list vector to semicolon-separated string
+    /// Serializes the bypass list vector into a semicolon-separated string.
     pub fn bypass_list_string(&self) -> String {
         self.bypass_list
             .iter()
@@ -144,6 +149,7 @@ fn write_string(mut w: impl Write, s: &str) -> Result<()> {
 impl TryFrom<&[u8]> for DefaultConnectionSettings {
     type Error = Error;
 
+    /// Deserializes from the registry binary layout into `DefaultConnectionSettings`.
     fn try_from(value: &[u8]) -> Result<Self> {
         let mut cursor = Cursor::new(value);
 
@@ -168,6 +174,7 @@ impl TryFrom<&[u8]> for DefaultConnectionSettings {
 impl TryFrom<DefaultConnectionSettings> for Vec<u8> {
     type Error = Error;
 
+    /// Serializes the settings into the registry binary layout.
     fn try_from(settings: DefaultConnectionSettings) -> Result<Self> {
         let mut cursor = Cursor::new(Vec::<u8>::new());
 
@@ -206,18 +213,22 @@ impl DefaultConnectionSettings {
         Ok(())
     }
 
+    /// Deserializes settings from raw bytes.
     pub fn from_bytes(data: &[u8]) -> Result<Self> {
         Self::try_from(data)
     }
 
+    /// Loads settings from the registry.
     pub fn from_registry() -> Result<Self> {
         Ok(Self::from_bytes(Self::get_registry_value()?.as_ref())?)
     }
 
+    /// Serializes settings into raw bytes.
     pub fn try_into_bytes(self) -> Result<Vec<u8>> {
         Vec::try_from(self)
     }
 
+    /// Persists the current settings back to the registry.
     pub fn write_registry(self) -> Result<()> {
         Self::set_registry_value(&Value::from(self.try_into_bytes()?.as_slice()))
     }
