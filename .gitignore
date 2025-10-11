@@ -1,4 +1,7 @@
+.zed/
 .idea/
+
+.DS_Store
 
 /target/
 *.exe
