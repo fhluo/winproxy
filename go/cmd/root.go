@@ -209,12 +209,9 @@ func initFlags() {
 }
 
 func flagsChanged(cmd *cobra.Command, names ...string) bool {
-	for _, name := range names {
-		if cmd.Flags().Changed(name) {
-			return true
-		}
-	}
-	return false
+	return slices.ContainsFunc(names, func(name string) bool {
+		return cmd.Flags().Changed(name)
+	})
 }
 
 func Execute() {
