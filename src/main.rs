@@ -1,4 +1,4 @@
-use clap::{arg, Parser};
+use clap::{Parser, arg};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL_CONDENSED;
 use comfy_table::{Cell, CellAlignment, Color, ContentArrangement, Table};
@@ -26,8 +26,8 @@ struct Args {
     #[arg(long, value_name = "ADDRESS")]
     script_address: Option<String>,
 
-    /// Bypass list
-    #[arg(long, value_name = "ADDRESS")]
+    /// Bypass list (semicolon-separated)
+    #[arg(long, value_name = "ADDRESS", value_delimiter = ';', num_args = 1..)]
     bypass_list: Option<Vec<String>>,
 }
 
