@@ -212,11 +212,11 @@ impl TryFrom<&[u8]> for DefaultConnectionSettings {
     }
 }
 
-impl TryFrom<DefaultConnectionSettings> for Vec<u8> {
+impl TryFrom<&DefaultConnectionSettings> for Vec<u8> {
     type Error = Error;
 
     /// Serializes the settings into the registry binary layout.
-    fn try_from(settings: DefaultConnectionSettings) -> Result<Self> {
+    fn try_from(settings: &DefaultConnectionSettings) -> Result<Self> {
         let mut cursor = Cursor::new(Vec::<u8>::new());
 
         cursor.write_u32::<LittleEndian>(settings.unknown)?;
@@ -265,12 +265,12 @@ impl DefaultConnectionSettings {
     }
 
     /// Serializes settings into raw bytes.
-    pub fn try_into_bytes(self) -> Result<Vec<u8>> {
+    pub fn to_bytes(&self) -> Result<Vec<u8>> {
         Vec::try_from(self)
     }
 
     /// Persists the current settings back to the registry.
     pub fn write_registry(self) -> Result<()> {
-        Self::set_registry_value(&Value::from(self.try_into_bytes()?.as_slice()))
+        Self::set_registry_value(&Value::from(self.to_bytes()?.as_slice()))
     }
 }
