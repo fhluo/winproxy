@@ -72,6 +72,18 @@ impl DefaultConnectionSettings {
         self.flags.set(Flags::Proxy, enabled);
     }
 
+    /// Enables the proxy.
+    #[inline]
+    pub fn enable_proxy(&mut self) {
+        self.set_proxy_enabled(true);
+    }
+
+    /// Disables the proxy.
+    #[inline]
+    pub fn disable_proxy(&mut self) {
+        self.set_proxy_enabled(false);
+    }
+
     /// Returns whether the automatic proxy script is enabled.
     #[inline]
     pub fn is_script_enabled(&self) -> bool {
@@ -82,6 +94,18 @@ impl DefaultConnectionSettings {
     #[inline]
     pub fn set_script_enabled(&mut self, enabled: bool) {
         self.flags.set(Flags::AutoProxyURL, enabled);
+    }
+
+    /// Enables the automatic proxy script.
+    #[inline]
+    pub fn enable_script(&mut self) {
+        self.set_script_enabled(true);
+    }
+
+    /// Disables the automatic proxy script.
+    #[inline]
+    pub fn disable_script(&mut self) {
+        self.set_script_enabled(false);
     }
 
     /// Returns whether automatic proxy detection is enabled.
@@ -96,6 +120,18 @@ impl DefaultConnectionSettings {
         self.flags.set(Flags::AutoDetect, enabled);
     }
 
+    /// Enables automatic proxy detection.
+    #[inline]
+    pub fn enable_auto_detect(&mut self) {
+        self.set_auto_detect_enabled(true);
+    }
+
+    /// Disables automatic proxy detection.
+    #[inline]
+    pub fn disable_auto_detect(&mut self) {
+        self.set_auto_detect_enabled(false);
+    }
+
     /// Parses a semicolon-separated bypass list into a vector of strings.
     fn parse_bypass_list(bypass_list: &str) -> Vec<String> {
         bypass_list
@@ -103,6 +139,11 @@ impl DefaultConnectionSettings {
             .map(|s| s.trim().to_string())
             .filter(|s| !s.is_empty())
             .collect()
+    }
+
+    /// Sets the bypass list from a semicolon-separated string.
+    pub fn set_bypass_list_from_str(&mut self, bypass_list: &str) {
+        self.bypass_list = Self::parse_bypass_list(bypass_list);
     }
 
     /// Serializes the bypass list vector into a semicolon-separated string.
