@@ -62,6 +62,39 @@ winproxy -p false
 # 设置 HTTP 代理
 winproxy -p true --proxy-address "127.0.0.1:8080"
 
-# 带忽略规则的代理配置
-winproxy -p true --proxy-address "127.0.0.1:8080" --bypass-list "localhost,127.*,<local>"
+# 带忽略列表（以分号分隔）
+winproxy -p true --proxy-address "127.0.0.1:8080" --bypass-list "localhost;127.*;<local>"
+```
+
+## 库用法
+
+在 Cargo.toml 中添加 winproxy：
+
+```toml
+[dependencies]
+winproxy = "0.5"
+```
+
+示例：
+
+```rust
+use winproxy::DefaultConnectionSettings;
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 读取当前代理设置
+    let mut settings = DefaultConnectionSettings::from_registry()?;
+    println!("当前设置: {:?}", settings);
+
+    // 启用代理并设置地址/忽略列表
+    settings.enable_proxy();
+    settings.proxy_address = "127.0.0.1:8080".to_string();
+    settings.set_bypass_list_from_str("localhost;127.*;<local>");
+
+    // 应用设置
+    settings.version += 1;
+    settings.write_registry()?;
+    println!("代理已启用!");
+
+    Ok(())
+}
 ```

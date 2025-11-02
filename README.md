@@ -62,6 +62,39 @@ winproxy -p false
 # Set HTTP proxy
 winproxy -p true --proxy-address "127.0.0.1:8080"
 
-# Set proxy with bypass list
-winproxy -p true --proxy-address "127.0.0.1:8080" --bypass-list "localhost,127.*,<local>"
+# Set proxy with bypass list (semicolon-separated)
+winproxy -p true --proxy-address "127.0.0.1:8080" --bypass-list "localhost;127.*;<local>"
+```
+
+## Library Usage
+
+Add `winproxy` to your `Cargo.toml`:
+
+```toml
+[dependencies]
+winproxy = "0.5"
+```
+
+Example usage:
+
+```rust
+use winproxy::DefaultConnectionSettings;
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Read current proxy settings
+    let mut settings = DefaultConnectionSettings::from_registry()?;
+    println!("Current settings: {:?}", settings);
+
+    // Enable proxy and set address/bypass list
+    settings.enable_proxy();
+    settings.proxy_address = "127.0.0.1:8080".to_string();
+    settings.set_bypass_list_from_str("localhost;127.*;<local>");
+
+    // Apply settings
+    settings.version += 1;
+    settings.write_registry()?;
+    println!("Proxy enabled!");
+
+    Ok(())
+}
 ```
