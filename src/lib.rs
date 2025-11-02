@@ -261,7 +261,7 @@ impl DefaultConnectionSettings {
 
     /// Loads settings from the registry.
     pub fn from_registry() -> Result<Self> {
-        Ok(Self::from_bytes(Self::get_registry_value()?.as_ref())?)
+        Self::from_bytes(Self::get_registry_value()?.as_ref())
     }
 
     /// Serializes settings into raw bytes.
