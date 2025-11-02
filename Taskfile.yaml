@@ -8,7 +8,7 @@ includes:
 
 tasks:
   run:
-    cmd: cargo run
+    cmd: cargo run -- {{.CLI_ARGS}}
 
   build:
     cmd: cargo build --release
