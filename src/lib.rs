@@ -10,10 +10,10 @@ use std::io::{Cursor, Read, Write};
 use std::string::FromUtf8Error;
 use std::{fmt, io, result};
 use thiserror::Error;
-use windows_registry::{Value, CURRENT_USER};
+use windows_registry::{CURRENT_USER, Value};
 
 bitflags! {
-    #[derive(Debug)]
+    #[derive(Copy, Clone, Debug)]
     pub struct Flags: u32 {
         const Direct = 0b0000_0001;
         const Proxy = 0b0000_0010;
@@ -232,9 +232,9 @@ impl TryFrom<&DefaultConnectionSettings> for Vec<u8> {
 }
 
 impl DefaultConnectionSettings {
-    const KEY_PATH: &'static str =
+    pub const KEY_PATH: &'static str =
         r"SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Connections";
-    const VALUE_NAME: &'static str = "DefaultConnectionSettings";
+    pub const VALUE_NAME: &'static str = "DefaultConnectionSettings";
 
     #[inline]
     fn get_registry_value() -> Result<Value> {
