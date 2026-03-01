@@ -5,8 +5,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/charmbracelet/lipgloss"
-	"github.com/charmbracelet/lipgloss/table"
+	"charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2/table"
 	"github.com/fhluo/winproxy/go"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
