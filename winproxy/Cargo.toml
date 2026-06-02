@@ -1,0 +1,18 @@
+[package]
+name = "winproxy"
+version = "0.5.1"
+edition = "2024"
+description = "Change Windows system proxy settings"
+categories = ["os::windows-apis"]
+keywords = ["windows", "proxy"]
+repository = "https://github.com/fhluo/winproxy"
+readme = "../README.md"
+license = "MIT"
+exclude = ["/examples"]
+
+[dependencies]
+windows-registry = "0.6"
+bitflags = "2.11"
+windows-result = "0.4"
+byteorder = "1.5"
+thiserror = "2.0"

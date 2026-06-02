@@ -23,7 +23,7 @@ Change Windows system proxy settings
 ### Using Cargo
 
 ```shell
-cargo install winproxy
+cargo install winproxy-cli
 ```
 
 ### Using Go

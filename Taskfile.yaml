@@ -8,10 +8,10 @@ includes:
 
 tasks:
   run:
-    cmd: cargo run -- {{.CLI_ARGS}}
+    cmd: cargo run -p winproxy-cli -- {{.CLI_ARGS}}
 
   build:
-    cmd: cargo build --release
+    cmd: cargo build -p winproxy-cli --release
 
   install:
-    cmd: cargo install --path .
+    cmd: cargo install --path winproxy-cli

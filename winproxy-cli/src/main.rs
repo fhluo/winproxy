@@ -1,4 +1,4 @@
-use clap::{Parser, arg};
+use clap::Parser;
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL_CONDENSED;
 use comfy_table::{Cell, CellAlignment, Color, ContentArrangement, Table};

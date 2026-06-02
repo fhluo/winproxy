@@ -23,7 +23,7 @@
 ### 使用 Cargo
 
 ```shell
-cargo install winproxy
+cargo install winproxy-cli
 ```
 
 ### 使用 Go
