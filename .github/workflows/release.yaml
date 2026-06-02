@@ -6,21 +6,19 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2025
+    runs-on: windows-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Rust
-        run: |
-          rustup default stable
-          rustup update
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          rustflags: ""
 
       - name: Set up Task
-        run: |
-          winget install --id Task.Task --accept-source-agreements --accept-package-agreements
-          "$env:LOCALAPPDATA\Microsoft\WinGet\Links" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+        uses: go-task/setup-task@v2
 
       - name: Build
         run: |
