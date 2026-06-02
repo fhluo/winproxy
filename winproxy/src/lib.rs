@@ -248,6 +248,9 @@ impl DefaultConnectionSettings {
     #[inline]
     fn set_registry_value(value: &Value) -> Result<()> {
         CURRENT_USER
+            .options()
+            .read()
+            .write()
             .open(Self::KEY_PATH)?
             .set_value(Self::VALUE_NAME, value)?;
 
