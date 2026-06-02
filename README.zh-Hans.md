@@ -72,7 +72,7 @@ winproxy -p true --proxy-address "127.0.0.1:8080" --bypass-list "localhost;127.*
 
 ```toml
 [dependencies]
-winproxy = "0.5"
+winproxy = "0.6"
 ```
 
 示例：

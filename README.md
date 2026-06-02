@@ -72,7 +72,7 @@ Add `winproxy` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-winproxy = "0.5"
+winproxy = "0.6"
 ```
 
 Example usage:
