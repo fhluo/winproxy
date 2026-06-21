@@ -36,8 +36,8 @@ func New() *DefaultConnectionSettings {
 func (settings *DefaultConnectionSettings) fields() iter.Seq[reflect.Value] {
 	return func(yield func(reflect.Value) bool) {
 		value := reflect.ValueOf(settings).Elem()
-		for i := 0; i < value.NumField(); i++ {
-			if !yield(value.Field(i)) {
+		for _, field := range value.Fields() {
+			if !yield(field) {
 				break
 			}
 		}
