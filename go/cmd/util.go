@@ -41,9 +41,9 @@ func (s Settings) BaseInfoTable() *table.Table {
 	t.StyleFunc(func(row, col int) lipgloss.Style {
 		if col == 0 {
 			return lipgloss.NewStyle().Align(lipgloss.Center).Width(16).Foreground(lipgloss.Color("#B99470")).Bold(true)
-		} else {
-			return lipgloss.NewStyle().Align(lipgloss.Center).Width(16).Foreground(lipgloss.Color("#F0ECE5"))
 		}
+
+		return lipgloss.NewStyle().Align(lipgloss.Center).Width(16).Foreground(lipgloss.Color("#F0ECE5"))
 	})
 
 	t.Rows(rows...)
@@ -62,9 +62,9 @@ func (s Settings) BypassListTable() *table.Table {
 	t.StyleFunc(func(row, col int) lipgloss.Style {
 		if row == 0 {
 			return lipgloss.NewStyle().Align(lipgloss.Center).Width(32).Foreground(lipgloss.Color("#B99470")).Bold(true)
-		} else {
-			return lipgloss.NewStyle().Align(lipgloss.Center).Width(32).Foreground(lipgloss.Color("#F0ECE5"))
 		}
+
+		return lipgloss.NewStyle().Align(lipgloss.Center).Width(32).Foreground(lipgloss.Color("#F0ECE5"))
 	})
 
 	return t.Headers(headers...).Rows(slices.Collect(func(yield func([]string) bool) {
@@ -86,9 +86,9 @@ func (s Settings) String() string {
 func CheckMark(b bool) string {
 	if b {
 		return "✓"
-	} else {
-		return "𐄂"
 	}
+
+	return "𐄂"
 }
 
 func Render(s winproxy.Settings) Settings {
