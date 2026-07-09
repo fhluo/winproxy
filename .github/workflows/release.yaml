@@ -17,12 +17,16 @@ jobs:
         with:
           rustflags: ""
 
-      - name: Set up Task
-        uses: go-task/setup-task@v2
+      - name: Set up Nushell
+        run: |
+          winget install -e --id=Nushell.Nushell --accept-source-agreements --accept-package-agreements
+          "$env:LOCALAPPDATA\Programs\nu\bin" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+
+      - name: Set up Just
+        uses: extractions/setup-just@v4
 
       - name: Build
-        run: |
-          task build
+        run: just build
 
       - name: Release
         uses: softprops/action-gh-release@v2
