@@ -1,5 +1,8 @@
 set shell := ["nu", "-c"]
 
+default:
+  @just --list
+
 setup-i18n:
   go install -v github.com/nicksnyder/go-i18n/v2/goi18n@latest
 
