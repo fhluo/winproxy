@@ -1,0 +1,25 @@
+set shell := ["nu", "-c"]
+
+setup-i18n:
+  go install -v github.com/nicksnyder/go-i18n/v2/goi18n@latest
+
+[working-directory: 'cmd']
+update-i18n:
+  goi18n extract -outdir locales
+  goi18n merge -outdir locales locales/active.*.toml locales/translate.*.toml
+  cd locales; cp active.en.toml en.toml; cp active.zh-Hans.toml zh-Hans.toml
+
+[working-directory: 'cmd/winproxy']
+run *args:
+  go run . {{args}}
+
+[working-directory: 'cmd/winproxy']
+build:
+  go build
+
+[working-directory: 'cmd/winproxy']
+install:
+  go install
+
+test:
+  go test -v ./...
