@@ -16,3 +16,6 @@ build-release:
 
 install:
   cargo install --path winproxy-cli
+
+test: go::test
+  cargo test --workspace
