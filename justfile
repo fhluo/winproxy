@@ -8,11 +8,10 @@ default:
 run *args:
   cargo run -p winproxy-cli -- {{args}}
 
-build:
-  cargo build -p winproxy-cli
+build *args:
+  cargo build -p winproxy-cli {{args}}
 
-build-release:
-  cargo build -p winproxy-cli --release
+release: (build "--release")
 
 install:
   cargo install --path winproxy-cli
