@@ -1,4 +1,6 @@
-use clap::Parser;
+mod i18n;
+
+use clap::{CommandFactory, FromArgMatches, Parser};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL_CONDENSED;
 use comfy_table::{Cell, CellAlignment, Color, ContentArrangement, Table};
@@ -7,15 +9,15 @@ use winproxy::{DefaultConnectionSettings, Flags};
 #[derive(Parser, Debug, Default, PartialEq)]
 struct Args {
     /// Use a proxy server
-    #[arg(short = 'p', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true")]
+    #[arg(short = 'p', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true", hide_possible_values = true)]
     use_proxy: Option<bool>,
 
     /// Use setup script
-    #[arg(short = 's', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true")]
+    #[arg(short = 's', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true", hide_possible_values = true)]
     use_script: Option<bool>,
 
     /// Automatically detect settings
-    #[arg(short = 'a', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true")]
+    #[arg(short = 'a', long, value_name = "BOOL", num_args(0..=1), require_equals(true), default_missing_value = "true", hide_possible_values = true)]
     auto_detect: Option<bool>,
 
     /// Proxy address
@@ -64,21 +66,30 @@ impl Args {
 }
 
 fn main() {
-    let args = Args::parse();
+    let args = parse_args();
 
-    let mut settings = DefaultConnectionSettings::from_registry()
-        .expect("failed to read default connection settings from registry");
+    let mut settings = DefaultConnectionSettings::from_registry().unwrap_or_else(|err| {
+        eprintln!("{}: {err}", i18n::t("read-registry-error"));
+        std::process::exit(1);
+    });
 
     if args.has_changes() {
         args.write_settings(&mut settings);
         settings.version += 1;
-        settings
-            .write_registry()
-            .expect("failed to write default connection settings to registry");
+        if let Err(err) = settings.write_registry() {
+            eprintln!("{}: {err}", i18n::t("write-registry-error"));
+            std::process::exit(1);
+        }
         return;
     }
 
     print_settings_table(&settings);
+}
+
+fn parse_args() -> Args {
+    let command = i18n::localize_command(Args::command());
+    let matches = command.get_matches();
+    Args::from_arg_matches(&matches).unwrap_or_else(|err| err.exit())
 }
 
 fn symbol_cell(b: bool) -> Cell {
@@ -89,8 +100,8 @@ fn symbol_cell(b: bool) -> Cell {
     }
 }
 
-fn title_cell(title: &str) -> Cell {
-    Cell::new(title).fg(Color::Green)
+fn title_cell(title: impl AsRef<str>) -> Cell {
+    Cell::new(title.as_ref()).fg(Color::Green)
 }
 
 fn print_settings_table(settings: &DefaultConnectionSettings) {
@@ -101,27 +112,27 @@ fn print_settings_table(settings: &DefaultConnectionSettings) {
         .apply_modifier(UTF8_ROUND_CORNERS)
         .set_content_arrangement(ContentArrangement::Dynamic)
         .add_row(vec![
-            title_cell("Proxy"),
+            title_cell(i18n::t("use-proxy-title")),
             symbol_cell(settings.is_proxy_enabled()),
         ])
         .add_row(vec![
-            title_cell("Script"),
+            title_cell(i18n::t("use-script-title")),
             symbol_cell(settings.is_script_enabled()),
         ])
         .add_row(vec![
-            title_cell("Auto-detect"),
+            title_cell(i18n::t("auto-detect-title")),
             symbol_cell(settings.is_auto_detect_enabled()),
         ])
         .add_row(vec![
-            title_cell("Proxy Address"),
+            title_cell(i18n::t("proxy-address-title")),
             Cell::new(&settings.proxy_address).fg(Color::Blue),
         ])
         .add_row(vec![
-            title_cell("Script Address"),
+            title_cell(i18n::t("script-address-title")),
             Cell::new(&settings.script_address).fg(Color::Blue),
         ])
         .add_row(vec![
-            title_cell("Bypass List"),
+            title_cell(i18n::t("bypass-list-title")),
             Cell::new(settings.bypass_list.join("\n")),
         ]);
 
