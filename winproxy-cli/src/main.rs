@@ -1,9 +1,11 @@
 mod i18n;
 
 use clap::{CommandFactory, FromArgMatches, Parser};
-use comfy_table::modifiers::UTF8_ROUND_CORNERS;
-use comfy_table::presets::UTF8_FULL_CONDENSED;
-use comfy_table::{Cell, CellAlignment, Color, ContentArrangement, Table};
+use tabled::builder::Builder;
+use tabled::settings::object::{Columns, Rows};
+use tabled::settings::style::BorderColor;
+use tabled::settings::themes::BorderCorrection;
+use tabled::settings::{Alignment, Color, Panel, Style};
 use winproxy::{DefaultConnectionSettings, Flags};
 
 #[derive(Parser, Debug, Default, PartialEq)]
@@ -92,56 +94,127 @@ fn parse_args() -> Args {
     Args::from_arg_matches(&matches).unwrap_or_else(|err| err.exit())
 }
 
-fn symbol_cell(b: bool) -> Cell {
-    if b {
-        Cell::new("[x]").fg(Color::White)
-    } else {
-        Cell::new("[ ]").fg(Color::DarkGrey)
-    }
-}
-
-fn title_cell(title: impl AsRef<str>) -> Cell {
-    Cell::new(title.as_ref()).fg(Color::Green)
-}
-
 fn print_settings_table(settings: &DefaultConnectionSettings) {
-    let mut table = Table::new();
+    let data = [
+        [
+            i18n::t("use-proxy-title"),
+            status_value(settings.is_proxy_enabled()),
+        ],
+        [
+            i18n::t("use-script-title"),
+            status_value(settings.is_script_enabled()),
+        ],
+        [
+            i18n::t("auto-detect-title"),
+            status_value(settings.is_auto_detect_enabled()),
+        ],
+        [
+            i18n::t("proxy-address-title"),
+            value_or_placeholder(&settings.proxy_address),
+        ],
+        [
+            i18n::t("script-address-title"),
+            value_or_placeholder(&settings.script_address),
+        ],
+    ];
 
+    let mut table = Builder::from_iter(data).build();
+
+    let palette = Palette::new();
     table
-        .load_preset(UTF8_FULL_CONDENSED)
-        .apply_modifier(UTF8_ROUND_CORNERS)
-        .set_content_arrangement(ContentArrangement::Dynamic)
-        .add_row(vec![
-            title_cell(i18n::t("use-proxy-title")),
-            symbol_cell(settings.is_proxy_enabled()),
-        ])
-        .add_row(vec![
-            title_cell(i18n::t("use-script-title")),
-            symbol_cell(settings.is_script_enabled()),
-        ])
-        .add_row(vec![
-            title_cell(i18n::t("auto-detect-title")),
-            symbol_cell(settings.is_auto_detect_enabled()),
-        ])
-        .add_row(vec![
-            title_cell(i18n::t("proxy-address-title")),
-            Cell::new(&settings.proxy_address).fg(Color::Blue),
-        ])
-        .add_row(vec![
-            title_cell(i18n::t("script-address-title")),
-            Cell::new(&settings.script_address).fg(Color::Blue),
-        ])
-        .add_row(vec![
-            title_cell(i18n::t("bypass-list-title")),
-            Cell::new(settings.bypass_list.join("\n")),
-        ]);
+        .with(Style::rounded().remove_horizontals())
+        .with(BorderColor::filled(palette.border.clone()))
+        .modify(Columns::first(), Alignment::left())
+        .modify(
+            Columns::first(),
+            BorderColor::new().right(palette.border.clone()),
+        )
+        .modify(Columns::first(), palette.label.clone() | Color::BOLD)
+        .modify(Columns::last(), Alignment::center());
 
-    if let Some(col) = table.column_mut(0) {
-        col.set_cell_alignment(CellAlignment::Left);
-    }
-    if let Some(col) = table.column_mut(1) {
-        col.set_cell_alignment(CellAlignment::Center);
+    let statuses = [
+        (0, settings.is_proxy_enabled()),
+        (1, settings.is_script_enabled()),
+        (2, settings.is_auto_detect_enabled()),
+    ];
+    for (row, enabled) in statuses {
+        table.modify(
+            (row, 1),
+            if enabled {
+                palette.on.clone()
+            } else {
+                palette.off.clone()
+            },
+        );
     }
 
-    println!("{table}");
+    if settings.proxy_address.is_empty() {
+        table.modify((3, 1), palette.placeholder.clone());
+    }
+    if settings.script_address.is_empty() {
+        table.modify((4, 1), palette.placeholder.clone());
+    }
+
+    let mut builder = Builder::default();
+    if settings.bypass_list.is_empty() {
+        builder.push_record(["—"]);
+    } else {
+        for item in &settings.bypass_list {
+            builder.push_record([item.clone()]);
+        }
+    }
+
+    let mut bypass_table = builder.build();
+    bypass_table
+        .with(Style::rounded())
+        .with(Panel::header(i18n::t("bypass-list-title")))
+        .with(BorderColor::filled(palette.border.clone()))
+        .with(BorderCorrection::span())
+        .modify(Rows::first(), Alignment::center())
+        .modify(
+            Rows::first(),
+            BorderColor::new().bottom(palette.border.clone()),
+        )
+        .modify(Rows::first(), palette.label.clone() | Color::BOLD)
+        .modify(Rows::new(1..), Alignment::center());
+
+    if settings.bypass_list.is_empty() {
+        bypass_table.modify((1, 0), palette.placeholder.clone());
+    }
+
+    anstream::println!("{table}\n{bypass_table}");
+}
+
+struct Palette {
+    border: Color,
+    label: Color,
+    on: Color,
+    off: Color,
+    placeholder: Color,
+}
+
+impl Palette {
+    fn new() -> Self {
+        Self {
+            border: Color::rgb_fg(0x4A, 0x47, 0x66),
+            label: Color::rgb_fg(0xD8, 0xA7, 0x6A),
+            on: Color::rgb_fg(0x3F, 0xB9, 0x50),
+            off: Color::rgb_fg(0x8B, 0x94, 0x9E),
+            placeholder: Color::rgb_fg(0x8B, 0x94, 0x9E),
+        }
+    }
+}
+
+fn status_value(on: bool) -> String {
+    if on { "✓" } else { "✗" }.to_string()
+}
+
+fn value_or_placeholder(value: impl Into<String>) -> String {
+    let value = value.into();
+
+    if value.is_empty() {
+        "—".to_string()
+    } else {
+        value
+    }
 }
