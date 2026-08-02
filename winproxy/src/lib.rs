@@ -3,6 +3,8 @@
 //! - Registry path: `HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Connections`
 //! - Value name: `DefaultConnectionSettings` (binary layout)
 
+#![cfg(windows)]
+
 use bitflags::bitflags;
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use std::fmt::{Debug, Formatter};
