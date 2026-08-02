@@ -1,6 +1,6 @@
 [package]
 name = "winproxy-cli"
-version = "0.6.2"
+version = "0.7.0"
 edition = "2024"
 description = "Change Windows system proxy settings"
 categories = ["command-line-utilities"]
@@ -14,7 +14,7 @@ name = "winproxy"
 path = "src/main.rs"
 
 [dependencies]
-winproxy = { version = "0.6", path = "../winproxy" }
+winproxy = { version = "0.7", path = "../winproxy" }
 clap = { version = "4.6", features = ["derive", "string"] }
 anstream = "1.0"
 tabled = { version = "0.21", features = ["ansi"] }
