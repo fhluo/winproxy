@@ -1,3 +1,6 @@
+#[cfg(not(windows))]
+compile_error!("`winproxy-cli` is only supported on Windows");
+
 mod i18n;
 
 use clap::{CommandFactory, FromArgMatches, Parser};
