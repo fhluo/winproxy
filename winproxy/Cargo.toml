@@ -2,6 +2,7 @@
 name = "winproxy"
 version = "0.7.1"
 edition = "2024"
+rust-version = "1.85"
 description = "Change Windows system proxy settings"
 categories = ["os::windows-apis"]
 keywords = ["windows", "proxy"]
