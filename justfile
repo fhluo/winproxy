@@ -41,7 +41,7 @@ bump-version version: (check-version version)
   just sync-version $ver
 
   print $"(ansi light_gray)Committing...(ansi reset)"
-  git add winproxy/Cargo.toml winproxy-cli/Cargo.toml Cargo.lock README.md README.zh-Hans.md
+  git add winproxy/Cargo.toml winproxy-cli/Cargo.toml Cargo.lock winproxy/src/lib.rs README.md README.zh-Hans.md
   git commit -m $"chore: bump version to ($ver)"
 
   print $"(ansi light_gray)Tagging v($ver)...(ansi reset)"
@@ -71,6 +71,10 @@ sync-version version:
 
   # let cargo refresh winproxy/winproxy-cli entries in Cargo.lock
   cargo metadata --format-version 1 | ignore
+
+  open --raw winproxy/src/lib.rs
+  | str replace -r 'winproxy = "\d+\.\d+"' $"winproxy = \"($major_minor)\""
+  | save -f winproxy/src/lib.rs
 
   open --raw README.md
   | str replace -r 'winproxy = "\d+\.\d+"' $"winproxy = \"($major_minor)\""
