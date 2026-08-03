@@ -1,7 +1,42 @@
-//! Utilities to read and write the DefaultConnectionSettings registry value.
+//! # winproxy
+//!
+//! The [winproxy](https://crates.io/crates/winproxy) crate reads and writes the Windows system proxy settings stored in the `DefaultConnectionSettings` registry value.
 //!
 //! - Registry path: `HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Connections`
 //! - Value name: `DefaultConnectionSettings` (binary layout)
+//!
+//! ## Getting Started
+//!
+//! Add this to your `Cargo.toml`:
+//!
+//! ```toml
+//! [dependencies]
+//! winproxy = "0.7"
+//! ```
+//!
+//! ## Example
+//!
+//! ```rust,no_run
+//! use winproxy::DefaultConnectionSettings;
+//!
+//! fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     // Read current proxy settings
+//!     let mut settings = DefaultConnectionSettings::from_registry()?;
+//!     println!("Current settings: {:#?}", settings);
+//!
+//!     // Enable proxy
+//!     settings.enable_proxy();
+//!     settings.proxy_address = "127.0.0.1:8080".to_string();
+//!     settings.set_bypass_list_from_str("localhost;127.*");
+//!
+//!     // Apply settings
+//!     settings.version += 1;
+//!     settings.write_registry()?;
+//!     println!("Proxy enabled!");
+//!
+//!     Ok(())
+//! }
+//! ```
 
 #![cfg(windows)]
 
