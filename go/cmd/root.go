@@ -37,15 +37,6 @@ var rootCmd = &cobra.Command{
 
 //go:generate go run github.com/fhluo/i18n/tools/gotext@latest -l en-US,zh-Hans -d ./i18n/locales/ -p ./i18n
 
-func init() {
-	var err error
-	settings, err = winproxy.ReadSettings()
-	if err != nil {
-		slog.Error("failed to read settings", "err", err)
-		os.Exit(1)
-	}
-}
-
 var initRootCmd = sync.OnceFunc(func() {
 	cobra.AddTemplateFuncs(template.FuncMap{
 		"FgHiWhite": color.New(color.FgHiWhite).SprintFunc(),
@@ -217,7 +208,16 @@ func flagsChanged(cmd *cobra.Command, names ...string) bool {
 	})
 }
 
+var loadSettings = sync.OnceValues(winproxy.ReadSettings)
+
 func Execute() {
+	s, err := loadSettings()
+	if err != nil {
+		slog.Error("failed to read settings", "err", err)
+		os.Exit(1)
+	}
+
+	settings = s
 	initRootCmd()
 
 	if err := rootCmd.Execute(); err != nil {
