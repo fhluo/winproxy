@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"cmp"
 	"fmt"
 	"log/slog"
 	"os"
@@ -95,10 +96,7 @@ func localizeHelpFlag() {
 	rootCmd.InitDefaultHelpFlag()
 	helpFlag := rootCmd.Flags().Lookup("help")
 	if helpFlag != nil {
-		commandName := Localize(&i18n.Message{ID: "this-command", Other: "this command"})
-		if rootCmd.Name() != "" {
-			commandName = rootCmd.Name()
-		}
+		commandName := cmp.Or(rootCmd.Name(), Localize(&i18n.Message{ID: "this-command", Other: "this command"}))
 
 		helpFlag.Usage = LocalizeConfig(&i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{ID: "help-for", Other: "help for {{.CommandName}}"},
