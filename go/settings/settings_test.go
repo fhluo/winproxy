@@ -1,7 +1,8 @@
 package settings
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"testing"
 	"unsafe"
 )
@@ -12,7 +13,7 @@ func TestDefaultConnectionSettings(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := json.MarshalIndent(s, "", "  ")
+	data, err := json.Marshal(s, jsontext.WithIndent("  "))
 	if err != nil {
 		t.Fatal(err)
 	}
