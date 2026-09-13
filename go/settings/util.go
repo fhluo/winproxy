@@ -74,6 +74,9 @@ func readString(r io.Reader) (string, error) {
 	if err := binary.Read(r, binary.LittleEndian, &size); err != nil {
 		return "", err
 	}
+	if size < 0 {
+		return "", fmt.Errorf("negative string size: %d", size)
+	}
 
 	s := make([]byte, size)
 	if err := binary.Read(r, binary.LittleEndian, s); err != nil {
