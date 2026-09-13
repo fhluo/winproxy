@@ -33,6 +33,20 @@ func New() *DefaultConnectionSettings {
 	}
 }
 
+// SetFlag enables or disables the given flag.
+func (settings *DefaultConnectionSettings) SetFlag(flag int32, enabled bool) {
+	if enabled {
+		settings.Flags |= flag
+	} else {
+		settings.Flags &^= flag
+	}
+}
+
+// HasFlag reports whether the given flag is set.
+func (settings *DefaultConnectionSettings) HasFlag(flag int32) bool {
+	return settings.Flags&flag != 0
+}
+
 func (settings *DefaultConnectionSettings) fields() iter.Seq[reflect.Value] {
 	return func(yield func(reflect.Value) bool) {
 		value := reflect.ValueOf(settings).Elem()

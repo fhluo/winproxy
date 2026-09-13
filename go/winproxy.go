@@ -28,9 +28,9 @@ func ReadSettings() (s Settings, err error) {
 		return
 	}
 	s = Settings{
-		Proxy:         base.Flags&settings.FlagProxy != 0,
-		Script:        base.Flags&settings.FlagAutoProxyURL != 0,
-		AutoDetect:    base.Flags&settings.FlagAutoDetect != 0,
+		Proxy:         base.HasFlag(settings.FlagProxy),
+		Script:        base.HasFlag(settings.FlagAutoProxyURL),
+		AutoDetect:    base.HasFlag(settings.FlagAutoDetect),
 		ProxyAddress:  base.ProxyAddress,
 		BypassList:    slices.Collect(parseBypassList(base.BypassList)),
 		ScriptAddress: base.ScriptAddress,
@@ -50,14 +50,6 @@ func parseBypassList(value string) iter.Seq[string] {
 	}
 }
 
-func setFlag(base *settings.DefaultConnectionSettings, flag int32, v bool) {
-	if v {
-		base.Flags |= flag
-	} else {
-		base.Flags &^= flag
-	}
-}
-
 // Apply writes the settings to the registry.
 func (s Settings) Apply() error {
 	base, err := settings.Read()
@@ -66,9 +58,9 @@ func (s Settings) Apply() error {
 	}
 
 	base.Version++
-	setFlag(base, settings.FlagProxy, s.Proxy)
-	setFlag(base, settings.FlagAutoProxyURL, s.Script)
-	setFlag(base, settings.FlagAutoDetect, s.AutoDetect)
+	base.SetFlag(settings.FlagProxy, s.Proxy)
+	base.SetFlag(settings.FlagAutoProxyURL, s.Script)
+	base.SetFlag(settings.FlagAutoDetect, s.AutoDetect)
 	base.ProxyAddress = s.ProxyAddress
 
 	for i := range s.BypassList {
