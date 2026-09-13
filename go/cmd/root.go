@@ -35,8 +35,6 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-//go:generate go run github.com/fhluo/i18n/tools/gotext@latest -l en-US,zh-Hans -d ./i18n/locales/ -p ./i18n
-
 var initRootCmd = sync.OnceFunc(func() {
 	cobra.AddTemplateFuncs(template.FuncMap{
 		"FgHiWhite": color.New(color.FgHiWhite).SprintFunc(),
