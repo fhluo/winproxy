@@ -1,6 +1,7 @@
 package winproxy
 
 import (
+	"fmt"
 	"iter"
 	"slices"
 	"strings"
@@ -9,8 +10,6 @@ import (
 )
 
 type Settings struct {
-	base *settings.DefaultConnectionSettings
-
 	Proxy        bool
 	ProxyAddress string
 
@@ -29,7 +28,6 @@ func ReadSettings() (s Settings, err error) {
 		return
 	}
 	s = Settings{
-		base:          base,
 		Proxy:         base.Flags&settings.FlagProxy != 0,
 		Script:        base.Flags&settings.FlagAutoProxyURL != 0,
 		AutoDetect:    base.Flags&settings.FlagAutoDetect != 0,
@@ -52,32 +50,33 @@ func parseBypassList(value string) iter.Seq[string] {
 	}
 }
 
-func (s Settings) setFlag(flag int32, v bool) {
+func setFlag(base *settings.DefaultConnectionSettings, flag int32, v bool) {
 	if v {
-		s.base.Flags |= flag
+		base.Flags |= flag
 	} else {
-		s.base.Flags &^= flag
+		base.Flags &^= flag
 	}
 }
 
 // Apply writes the settings to the registry.
 func (s Settings) Apply() error {
-	if s.base == nil {
-		s.base = settings.New()
+	base, err := settings.Read()
+	if err != nil {
+		return fmt.Errorf("failed to read settings: %w", err)
 	}
 
-	s.base.Version++
-	s.setFlag(settings.FlagProxy, s.Proxy)
-	s.setFlag(settings.FlagAutoProxyURL, s.Script)
-	s.setFlag(settings.FlagAutoDetect, s.AutoDetect)
-	s.base.ProxyAddress = s.ProxyAddress
+	base.Version++
+	setFlag(base, settings.FlagProxy, s.Proxy)
+	setFlag(base, settings.FlagAutoProxyURL, s.Script)
+	setFlag(base, settings.FlagAutoDetect, s.AutoDetect)
+	base.ProxyAddress = s.ProxyAddress
 
 	for i := range s.BypassList {
 		s.BypassList[i] = strings.TrimSpace(s.BypassList[i])
 	}
-	s.base.BypassList = strings.Join(s.BypassList, ";")
+	base.BypassList = strings.Join(s.BypassList, ";")
 
-	s.base.ScriptAddress = s.ScriptAddress
+	base.ScriptAddress = s.ScriptAddress
 
-	return settings.Write(s.base)
+	return settings.Write(base)
 }
