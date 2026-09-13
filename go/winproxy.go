@@ -1,6 +1,8 @@
 package winproxy
 
 import (
+	"iter"
+	"slices"
 	"strings"
 
 	"github.com/fhluo/winproxy/go/settings"
@@ -32,11 +34,22 @@ func ReadSettings() (s Settings, err error) {
 		Script:        base.Flags&settings.FlagAutoProxyURL != 0,
 		AutoDetect:    base.Flags&settings.FlagAutoDetect != 0,
 		ProxyAddress:  base.ProxyAddress,
-		BypassList:    strings.Split(strings.TrimSpace(base.BypassList), ";"),
+		BypassList:    slices.Collect(parseBypassList(base.BypassList)),
 		ScriptAddress: base.ScriptAddress,
 	}
 
 	return
+}
+
+// parseBypassList returns an iterator over the trimmed non-empty items of a semicolon-separated bypass list.
+func parseBypassList(value string) iter.Seq[string] {
+	return func(yield func(string) bool) {
+		for item := range strings.SplitSeq(value, ";") {
+			if item = strings.TrimSpace(item); item != "" && !yield(item) {
+				return
+			}
+		}
+	}
 }
 
 func (s Settings) setFlag(flag int32, v bool) {
