@@ -50,6 +50,27 @@ func parseBypassList(value string) iter.Seq[string] {
 	}
 }
 
+// formatBypassList returns a semicolon-separated bypass list of the trimmed non-empty items of list.
+func formatBypassList(list []string) string {
+	size := max(len(list)-1, 0)
+	for _, item := range list {
+		size += len(item)
+	}
+
+	var b strings.Builder
+	b.Grow(size)
+	for _, item := range list {
+		if item = strings.TrimSpace(item); item != "" {
+			if b.Len() > 0 {
+				b.WriteByte(';')
+			}
+			b.WriteString(item)
+		}
+	}
+
+	return b.String()
+}
+
 // Apply writes the settings to the registry.
 func (s Settings) Apply() error {
 	base, err := settings.Read()
@@ -58,16 +79,13 @@ func (s Settings) Apply() error {
 	}
 
 	base.Version++
+
 	base.SetFlag(settings.FlagProxy, s.Proxy)
 	base.SetFlag(settings.FlagAutoProxyURL, s.Script)
 	base.SetFlag(settings.FlagAutoDetect, s.AutoDetect)
+
 	base.ProxyAddress = s.ProxyAddress
-
-	for i := range s.BypassList {
-		s.BypassList[i] = strings.TrimSpace(s.BypassList[i])
-	}
-	base.BypassList = strings.Join(s.BypassList, ";")
-
+	base.BypassList = formatBypassList(s.BypassList)
 	base.ScriptAddress = s.ScriptAddress
 
 	return settings.Write(base)
