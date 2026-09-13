@@ -6,6 +6,7 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"sync"
 	"text/template"
 
 	"github.com/fatih/color"
@@ -43,7 +44,9 @@ func init() {
 		slog.Error("failed to read settings", "err", err)
 		os.Exit(1)
 	}
+}
 
+var initRootCmd = sync.OnceFunc(func() {
 	cobra.AddTemplateFuncs(template.FuncMap{
 		"FgHiWhite": color.New(color.FgHiWhite).SprintFunc(),
 	})
@@ -53,7 +56,7 @@ func init() {
 	localizeCompletionCommand()
 	localizeUsageTemplate()
 	initFlags()
-}
+})
 
 func localizeHelpCommand() {
 	rootCmd.InitDefaultHelpCmd()
@@ -215,6 +218,8 @@ func flagsChanged(cmd *cobra.Command, names ...string) bool {
 }
 
 func Execute() {
+	initRootCmd()
+
 	if err := rootCmd.Execute(); err != nil {
 		slog.Error(err.Error())
 		os.Exit(1)
