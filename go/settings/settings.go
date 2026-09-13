@@ -22,7 +22,7 @@ type DefaultConnectionSettings struct {
 	ProxyAddress  string   `json:"proxy_address"`
 	BypassList    string   `json:"bypass_list"`
 	ScriptAddress string   `json:"script_address"`
-	UnKnown1      [32]byte `json:"unknown1"`
+	Unknown1      [32]byte `json:"unknown1"`
 }
 
 // New returns a new DefaultConnectionSettings with Unknown set to 70 and Flags set to FlagDirect.
