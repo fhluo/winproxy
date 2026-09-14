@@ -916,7 +916,7 @@ dependencies = [
 
 [[package]]
 name = "winproxy"
-version = "0.7.4"
+version = "0.7.5"
 dependencies = [
  "bitflags",
  "byteorder",
@@ -927,7 +927,7 @@ dependencies = [
 
 [[package]]
 name = "winproxy-cli"
-version = "0.7.4"
+version = "0.7.5"
 dependencies = [
  "anstream",
  "clap",
