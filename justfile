@@ -23,22 +23,15 @@ test: go::test
 
 [group: 'release']
 [script]
-check-version version:
-  if "{{version}}" not-like '^v?\d+\.\d+\.\d+$' {
-    print $"(ansi red)invalid version: {{version}}, expected a version like 0.5.0 or v0.5.0(ansi reset)"
-    exit 1
-  }
+bump-version version:
+  let ver = ("{{version}}" | into semver --loose | into record | reject prefix | into semver | to text)
 
-[group: 'release']
-[script]
-bump-version version: (check-version version)
   let status = (git status --porcelain --untracked-files=no)
   if ($status | is-not-empty) {
     print $"(ansi red)working tree is not clean, please commit or stash changes first(ansi reset)"
     exit 1
   }
 
-  let ver = ("{{version}}" | str replace -r '^v' '')
   print $"(ansi light_gray)Syncing version to ($ver)...(ansi reset)"
   just sync-version $ver
 
