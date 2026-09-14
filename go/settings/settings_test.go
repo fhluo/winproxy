@@ -4,7 +4,6 @@ import (
 	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"testing"
-	"unsafe"
 )
 
 func TestDefaultConnectionSettings(t *testing.T) {
@@ -28,5 +27,5 @@ func TestDefaultConnectionSettings(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Logf("%v", unsafe.String(unsafe.SliceData(data), len(data)))
+	t.Logf("%v", string(data))
 }

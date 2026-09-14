@@ -2,8 +2,8 @@ package settings
 
 import (
 	"encoding/binary"
+	"fmt"
 	"io"
-	"unsafe"
 
 	"golang.org/x/sys/windows/registry"
 )
@@ -83,7 +83,7 @@ func readString(r io.Reader) (string, error) {
 		return "", err
 	}
 
-	return unsafe.String(unsafe.SliceData(s), size), nil
+	return string(s), nil
 }
 
 func writeString(w io.Writer, s string) error {
@@ -91,5 +91,6 @@ func writeString(w io.Writer, s string) error {
 		return err
 	}
 
-	return binary.Write(w, binary.LittleEndian, unsafe.Slice(unsafe.StringData(s), len(s)))
+	_, err := io.WriteString(w, s)
+	return err
 }
