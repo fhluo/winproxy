@@ -60,14 +60,16 @@ bump-version version: (check-version version)
 [group: 'release']
 [script]
 sync-version version:
-  let major_minor = ("{{version}}" | into semver --loose | into record | $"($in.major).($in.minor)")
+  let version = "{{version}}" | into semver --loose
+  let major_minor = ($version | into record | $"($in.major).($in.minor)")
+  let package_version = ($version | into record | reject prefix | into semver)
 
   open --raw winproxy/Cargo.toml
-  | str replace -r '(?m)^version = "\d+\.\d+\.\d+"' 'version = "{{version}}"'
+  | str replace -r '(?m)^version = "\d+\.\d+\.\d+"' $"version = \"($package_version)\""
   | save -f winproxy/Cargo.toml
 
   open --raw winproxy-cli/Cargo.toml
-  | str replace -r '(?m)^version = "\d+\.\d+\.\d+"' 'version = "{{version}}"'
+  | str replace -r '(?m)^version = "\d+\.\d+\.\d+"' $"version = \"($package_version)\""
   | str replace -r 'winproxy = \{ version = "\d+\.\d+"' $"winproxy = { version = \"($major_minor)\""
   | save -f winproxy-cli/Cargo.toml
 
