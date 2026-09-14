@@ -1,6 +1,7 @@
 mod go
 
 set shell := ["nu", "-c"]
+set script-interpreter := ["nu"]
 
 default:
   @just --list
@@ -20,16 +21,16 @@ test: go::test
   cargo test --workspace
 
 [group: 'release']
+[script]
 check-version version:
-  #!nu
   if "{{version}}" not-like '^v?\d+\.\d+\.\d+$' {
     print $"(ansi red)invalid version: {{version}}, expected a version like 0.5.0 or v0.5.0(ansi reset)"
     exit 1
   }
 
 [group: 'release']
+[script]
 bump-version version: (check-version version)
-  #!nu
   let status = (git status --porcelain --untracked-files=no)
   if ($status | is-not-empty) {
     print $"(ansi red)working tree is not clean, please commit or stash changes first(ansi reset)"
@@ -56,8 +57,8 @@ bump-version version: (check-version version)
   print $"(ansi green)✓ Bumped to ($ver), published winproxy and winproxy-cli(ansi reset)"
 
 [group: 'release']
+[script]
 sync-version version:
-  #!nu
   let major_minor = ("{{version}}" | split row '.' | first 2 | str join '.')
 
   open --raw winproxy/Cargo.toml
