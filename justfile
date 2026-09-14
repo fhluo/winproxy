@@ -59,7 +59,7 @@ bump-version version: (check-version version)
 [group: 'release']
 [script]
 sync-version version:
-  let major_minor = ("{{version}}" | split row '.' | first 2 | str join '.')
+  let major_minor = ("{{version}}" | into semver --loose | into record | $"($in.major).($in.minor)")
 
   open --raw winproxy/Cargo.toml
   | str replace -r '(?m)^version = "\d+\.\d+\.\d+"' 'version = "{{version}}"'
