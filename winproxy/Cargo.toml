@@ -16,10 +16,10 @@ default-target = "x86_64-pc-windows-msvc"
 targets = []
 
 [dependencies]
-bitflags = "2.11"
+bitflags = "2.13"
 byteorder = "1.5"
 thiserror = "2.0"
 
 [target.'cfg(windows)'.dependencies]
-windows-registry = "0.6"
-windows-result = "0.4"
+windows-registry = "0.100"
+windows-result = "0.100"
