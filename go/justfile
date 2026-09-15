@@ -1,9 +1,7 @@
 set shell := ["nu", "-c"]
 set script-interpreter := ["nu"]
 set indentation := "  "
-
-default:
-  @just --list
+set default-list := true
 
 setup-i18n:
   go install -v github.com/nicksnyder/go-i18n/v2/goi18n@latest

@@ -3,9 +3,7 @@ mod go
 set shell := ["nu", "-c"]
 set script-interpreter := ["nu"]
 set indentation := "  "
-
-default:
-  @just --list
+set default-list := true
 
 run *args:
   cargo run -p winproxy-cli -- {{args}}
