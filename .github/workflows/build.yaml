@@ -3,21 +3,20 @@ name: Build
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'go/**'
+      - '.github/workflows/build-go.yaml'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - 'go/**'
+      - '.github/workflows/build-go.yaml'
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
-
-      - name: Set up Go
-        uses: actions/setup-go@v7
-        with:
-          go-version: 'stable'
-          cache-dependency-path: |
-            go/go.sum
 
       - name: Set up Rust
         uses: actions-rust-lang/setup-rust-toolchain@v2

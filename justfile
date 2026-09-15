@@ -18,7 +18,7 @@ release: (build "--release")
 install:
   cargo install --path winproxy-cli
 
-test: go::test
+test:
   cargo test --workspace
 
 [group: 'release']
