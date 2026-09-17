@@ -1,17 +1,11 @@
+mod version
+mod i18n
+
 set shell := ["nu", "-c"]
 set script-interpreter := ["nu"]
 set indentation := "  "
 set default-list := true
 set fallback
-
-setup-i18n:
-  go install -v github.com/nicksnyder/go-i18n/v2/goi18n@latest
-
-[working-directory: 'cmd']
-update-i18n:
-  goi18n extract -outdir locales
-  goi18n merge -outdir locales locales/active.*.toml locales/translate.*.toml
-  cd locales; cp active.en.toml en.toml; cp active.zh-Hans.toml zh-Hans.toml
 
 [working-directory: 'cmd/winproxy']
 run *args:
@@ -27,26 +21,3 @@ install:
 
 test:
   go test -v ./...
-
-[group: 'release']
-[script]
-bump-version version:
-  let ver = ("{{version}}" | into semver --loose | into record | reject prefix | into semver | to text)
-
-  let status = (git status --porcelain --untracked-files=no)
-  if ($status | is-not-empty) {
-    print $"(ansi red)working tree is not clean, please commit or stash changes first(ansi reset)"
-    exit 1
-  }
-
-  let tag = $"go/v($ver)"
-
-  if (git tag -l $tag | is-not-empty) {
-    print $"(ansi red)tag ($tag) already exists(ansi reset)"
-    exit 1
-  }
-
-  print $"(ansi light_gray)Tagging ($tag)...(ansi reset)"
-  git tag $tag -m $"($tag)"
-
-  print $"(ansi green)✓ Bumped to ($tag)(ansi reset)"
